@@ -76,7 +76,7 @@ function AddParticipant({navigation, route}: AddParticipantProps) {
         console.log("Selected contact:", selectedContact);
 
         // Navigate to the CreateGroup screen with the updated participants
-        navigation.navigate("CreateGroup", { participants: [...participants, selectedContact] });
+        navigation.navigate("CreateGroup", { participants: [...participants, selectedContact] as AddressBookEntry[] });
     };
 
 

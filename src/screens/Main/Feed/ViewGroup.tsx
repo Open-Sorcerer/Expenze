@@ -1,20 +1,23 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, FlatList, StyleSheet, TextInput, useWindowDimensions} from "react-native";
 import {Box, Text, theme} from "theme";
 import Usdt from "icons/Usdt";
-import {useNavigation} from "@react-navigation/native";
-import {participant} from "types/common";
+import {ViewGroupProps} from "types/navigation";
+import {AddressBookEntry} from "lib/splitwiseHelper";
 
-function ViewGroup() {
+function ViewGroup({navigation, route}: ViewGroupProps) {
     const {width} = useWindowDimensions();
-    const navigation = useNavigation();
     const [expensesList, setExpensesList] = useState([
         {name: "Dinner", amount: 0},
     ]);
     const [expenseName, setExpenseName] = useState("");
     const [expenseAmount, setExpenseAmount] = useState("");
-    const [participants] = useState<participant[]>([]);
-
+    const [participants, setParticipants] = useState<AddressBookEntry[]>(route.params.participants);
+    useEffect(() => {
+        console.log("Participants:");
+        console.log(route.params.participants);
+        setParticipants(route.params.participants);
+    }, [route.params.participants]);
     const onSave = () => {
         // Logic to handle save action
         console.log("Save button pressed");

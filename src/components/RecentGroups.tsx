@@ -6,6 +6,9 @@ import GroupCard from "components/GroupCard";
 import ErrorMessage from "./UI/ErrorMessage";
 
 const GROUP_CARD_HEIGHT = 43;
+function ListHeaderComponent() {
+  return <Text variant="heading" color="primaryCardText">Your recent groups</Text>
+}
 
 async function fetchGroups() {
     return [
@@ -124,8 +127,5 @@ function RecentGroups() {
     );
 }
 
-function ListHeaderComponent() {
-  return <Text variant="heading" color="primaryCardText">Your recent groups</Text>
-}
 
 export default RecentGroups;
