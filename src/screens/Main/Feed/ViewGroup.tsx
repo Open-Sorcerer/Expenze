@@ -1,18 +1,24 @@
 import React, {useEffect, useState} from "react";
-import {Button, FlatList, useWindowDimensions} from "react-native";
+import {ActivityIndicator, Button, FlatList, RefreshControl, useWindowDimensions} from "react-native";
 import {Box, Text} from "theme";
 import Usdt from "icons/Usdt";
 import {ViewGroupProps} from "types/navigation";
-import {AddressBookEntry, getUserDetails} from "lib/splitwiseHelper";
+import {AddressBookEntry, getGroupDetails, getUserDetails} from "lib/splitwiseHelper";
 import {Expense} from "types/common";
+import ErrorMessage from "components/UI/ErrorMessage";
 
 function ViewGroup({navigation, route}: ViewGroupProps) {
     const {width} = useWindowDimensions();
     const [expensesList, setExpensesList] = useState<Expense[]>([]);
     const [participants, setParticipants] = useState<AddressBookEntry[]>([]);
     const [group] = useState(route.params!.group);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [error] = useState<string | null>(null);
+    const [loading] = useState(false);
+
     const fetchUsers = async () => {
         const {users} = group;
+        participants.splice(0);
         for (const user of users) {
             const userDetails = await getUserDetails(user);
             console.log(userDetails);
@@ -28,9 +34,10 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
     };
 
     const fetchExpenses = async () => {
-        const {expenses} = route.params!.group;
+        const {groupId} = group;
+        const updatedGroup = await getGroupDetails(`${groupId}`);
         expensesList.splice(0);
-        for (const expense of expenses) {
+        for (const expense of updatedGroup.expenses) {
             expensesList.push(
                 {
                     id: `${expense.expenseId}`,
@@ -44,7 +51,6 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
             );
         }
         console.log("Expenses:");
-        console.log(expenses);
         console.log(expensesList);
         setExpensesList(expensesList);
     }
@@ -57,11 +63,28 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
     }, [group.users]);
 
     useEffect(() => {
-        console.log("Expenses:");
-        console.log(group.expenses);
         if (group.expenses)
             fetchExpenses();
     }, [group.expenses]);
+
+    if (error) {
+        return <ErrorMessage message="Failed to load groups"/>;
+    }
+    if (loading) {
+        return <ActivityIndicator size="small"/>;
+    }
+
+    const handleRefresh = async () => {
+        try {
+            setIsRefreshing(true);
+            // const controller = new AbortController();
+
+            await fetchExpenses();
+        } catch (error) {
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
 
     const onSave = () => {
         // Logic to handle save action
@@ -73,6 +96,9 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
              backgroundColor="mainBackground" padding="m">
             <FlatList
                 data={expensesList}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh}/>
+                }
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={({item}) => (
                     <Box

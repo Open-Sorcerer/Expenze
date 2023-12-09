@@ -11,11 +11,7 @@ function AddExpense({navigation, route}: AddExpenseProps) {
     const [payer, setPayer] = useState<string>("");
     const [amount, setAmount] = useState<number>(0);
     const {group} = route.params;
-    const [participants] = useState<AddressBookEntry[]>(
-        [...route.params.participants,
-            {name: "Myself", walletAddress: "0x0000000000"},
-            {name: "Dummy", walletAddress: "0x0000000000"},
-        ]);
+    const [participants] = useState<AddressBookEntry[]>(route.params.participants);
     const [selectedParticipants, setSelectedParticipants] = useState<participant[]>([]);
 
     const toggleParticipant = (selectedParticipant: participant) => {

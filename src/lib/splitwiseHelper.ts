@@ -325,6 +325,23 @@ export const createExpense = async (
     console.log("expense added to group");
 };
 
+export const getExpenseDetails = async (expenseId: string) => {
+    console.log("fetching expense details");
+
+    // check if the expense exists
+
+    const expense = (await redis1.get(`expense:${expenseId}`)) as expense;
+    if (expense === null) {
+        console.log("expense not found");
+
+        return;
+    }
+
+    console.log("expense details fetched");
+
+    return expense;
+}
+
 export const updateExpenseDetails = async (
     expenseId: string,
     payer: string,

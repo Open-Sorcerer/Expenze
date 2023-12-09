@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {Box, Text} from "theme";
-import {Button, FlatList, useWindowDimensions} from "react-native";
+import {ActivityIndicator, Button, FlatList, RefreshControl, useWindowDimensions} from "react-native";
 import Usdt from "icons/Usdt";
 import formatEthAddress from "utils/formatEthAddress";
 import {useNavigation} from "@react-navigation/native";
 import useAppState from "store/AppStore";
 import {AddressBook, addressBookFetch} from "lib/splitwiseHelper";
+import ErrorMessage from "components/UI/ErrorMessage";
 
 function AddressBookie() {
     const {width} = useWindowDimensions();
@@ -14,6 +15,10 @@ function AddressBookie() {
     const [contactList, setContactList] = useState([
         {name: "saviour1001.eth", walletAddress: formatEthAddress("0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a")},
     ]);
+    const [loading] = useState(false);
+    const [error] = useState<string | null>(null);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
     const fetchData = async () => {
         try {
             const fetchedContacts: AddressBook = await addressBookFetch(currentAddress!) as unknown as AddressBook;
@@ -34,6 +39,25 @@ function AddressBookie() {
         fetchData();
     }, [currentAddress]);
 // Include currentAddress in the dependency array to re-run the effect when it changes
+
+    if (error) {
+        return <ErrorMessage message="Failed to load groups"/>;
+    }
+    if (loading) {
+        return <ActivityIndicator size="small"/>;
+    }
+
+    const handleRefresh = async () => {
+        try {
+            setIsRefreshing(true);
+            // const controller = new AbortController();
+
+            fetchData();
+        } catch (error) { /* empty */
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
 
     const renderItem = ({item}: { item: any }) => (
         <Box
@@ -77,6 +101,9 @@ function AddressBookie() {
                 data={contactList}
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={renderItem}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh}/>
+                }
                 showsVerticalScrollIndicator={false}
             />
             <Box flex={1} flexDirection="row"
