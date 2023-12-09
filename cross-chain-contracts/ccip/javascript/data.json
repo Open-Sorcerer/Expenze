@@ -1,0 +1,16 @@
+{
+  "destination": "12532609583862916517",
+  "message": {
+    "receiver": "0x0000000000000000000000009309860f6e4b79b1a40ba35327cd6ae1bb27dac7",
+    "data": "0x",
+    "tokenAmounts": [
+      {
+        "token": "0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05",
+        "amount": { "type": "BigNumber", "hex": "0x038d7ea4c68000" }
+      }
+    ],
+    "feeToken": "0x779877A7B0D9E8603169DdbD7836e478b4624789",
+    "extraArgs": "0x97a657c900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "fees": { "type": "BigNumber", "hex": "0x0111a6ca974421fd" }
+}
