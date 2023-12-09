@@ -64,7 +64,7 @@ Get ready to blast off! Execute the following command:
 
 ### The Cosmic Dashboard:
 
-![Home Screen](https://ik.imagekit.io/4uh8nmwsx/tr:h-300/d34bd49d-116f-44d9-9f06-a5184401fd88.jpeg?updatedAt=1696410633340)
+<img src="https://github.com/Open-Sorcerer/Expenze/assets/63473496/508e2914-4b2a-46c8-9e75-a589f2ef2c05" height="600"/>
 
 ## What You Can Explore
 
