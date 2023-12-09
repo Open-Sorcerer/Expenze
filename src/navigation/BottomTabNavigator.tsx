@@ -1,19 +1,38 @@
+// BottomTabNavigator.tsx
 import React from "react";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Wallet from "screens/Main/Wallet";
-import {Ionicons} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import useThemeStore from "store/ThemeStore";
-import {Box, darkTheme, theme} from "theme";
+import { Box, darkTheme, theme } from "theme";
 import FeedStackNavigator from "navigation/FeedStackNavigator";
+import AddressBook from "screens/Main/Contacts/AddressBook";
+
+// type ParamListBase = {
+//     Feed: undefined;
+//     Wallet: undefined;
+//     AddressBook: undefined;
+//     Account: undefined;
+// };
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
-    const {activeTheme} = useThemeStore();
+function getIconName(routeName: string, isFocused: boolean): string {
+    switch (routeName) {
+        case "Feed":
+            return isFocused ? "home" : "home-outline";
+        case "Wallet":
+            return isFocused ? "wallet" : "wallet-outline";
+        case "AddressBook":
+            return isFocused ? "person" : "person-outline";
+        default:
+            return isFocused ? "home" : "home-outline";
+    }
+}
+
+function BottomTabNavigator() {
+    const { activeTheme } = useThemeStore();
     const isDarkTheme = activeTheme === "dark";
-    // const tabBarBg = isDarkTheme
-    //     ? darkTheme.colors.mainBackground
-    //     : theme.colors.mainBackground;
 
     const headerTintColor = isDarkTheme
         ? darkTheme.colors.primaryCardText
@@ -21,49 +40,32 @@ const BottomTabNavigator = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName="FeedHome"
-            screenOptions={({
-                                route
-                            }) => ({
-                tabBarIcon: ({focused, color, size}) => {
-                    return <Ionicons name={
-                        route.name === "Feed"
-                            ? focused
-                                ? "home"
-                                : "home-outline"
-                            :
-                            route.name === "Wallet" ?
-                                focused
-                                    ? "wallet"
-                                    : "wallet-outline"
-                                :
-                                route.name === "Profile" ?
-                                    focused
-                                        ? "person"
-                                        : "person-outline"
-                                    :
-                                    focused
-                                        ? "home"
-                                        : "home-outline"
-                    } size={size} color={color}/>;
-                },
-                tabBarStyle: {position: 'absolute'},
+            initialRouteName="Feed"
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ color, size, focused }) => (
+                    <Ionicons
+                        name={getIconName(route.name, focused)}
+                        size={size}
+                        color={color}
+                    />
+                ),
+                tabBarStyle: { position: 'absolute' },
                 tabBarBackground: () => (
                     <Box
                         flex={1}
                         backgroundColor="mainBackground"
-                        height={"100%"}
+                        height="100%"
                     />
                 ),
                 tabBarActiveTintColor: headerTintColor,
             })}
         >
-            <Tab.Screen name="Feed" component={FeedStackNavigator} options={{headerShown: false}}/>
-            <Tab.Screen name="Wallet" component={Wallet} options={{headerShown: false}}/>
-            <Tab.Screen name="AddressBook" component={Wallet} options={{headerShown: false}}/>
-            <Tab.Screen name="Account" component={Wallet} options={{headerShown: false}}/>
+            <Tab.Screen name="Feed" component={FeedStackNavigator} options={{ headerShown: false }} />
+            <Tab.Screen name="Wallet" component={Wallet} options={{ headerShown: false }} />
+            <Tab.Screen name="AddressBook" component={AddressBook} options={{ headerShown: false }} />
+            <Tab.Screen name="Account" component={Wallet} options={{ headerShown: false }} />
         </Tab.Navigator>
     );
-};
+}
 
 export default BottomTabNavigator;
