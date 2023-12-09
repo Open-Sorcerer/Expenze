@@ -44,11 +44,17 @@ const useCCIPTransfer = () => {
       functionName: "ccipSend",
     });
 
-    // todo - add args
+    console.log("data", data);
 
-    const tx = await writeAsync({
-      args: [],
-    });
+    // // todo - add args
+
+    // const tx = await writeAsync({
+    //   args: [],
+    // });
+  };
+
+  return {
+    SendBlockchainTxn,
   };
 };
 
