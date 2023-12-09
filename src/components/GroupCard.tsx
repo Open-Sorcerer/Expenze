@@ -17,7 +17,7 @@ function GroupCard({group}: Props) {
     const {currentAddress} = useAppState();
     return (
         <Pressable
-            key={group.name}
+            key={group.groupName}
             onPress={() => navigation.navigate("ViewGroup", {
                 participants: [{
                     name: "You",
@@ -43,10 +43,10 @@ function GroupCard({group}: Props) {
 
                 <Box flex={1}>
                     <Text variant="body" color="primaryCardText">
-                        {group.name}
+                        {group.groupName}
                     </Text>
                     <Text color="secondaryCardText">
-                        Settled Up: {group.settledUp ? "Yes" : "No"}
+                        Settled Up: {group.groupDescription}
                     </Text>
                 </Box>
             </Box>

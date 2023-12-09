@@ -1,3 +1,5 @@
+import {expense, settlingTxnsEntry} from "lib/splitwiseHelper";
+
 export type Transaction = {
   blockNum: string;
   uniqueID: string;
@@ -19,12 +21,13 @@ export type RawContract = {
   decimal: string;
 };
 
-export type Group = {
-  name: string;
-  asset: string;
-  settledUp: boolean;
-  transactions: Transaction[];
-};
+export interface Group {
+  groupName: string;
+  users: string[];
+  expenses: expense[];
+  settllingTxns: settlingTxnsEntry[];
+  groupDescription: string;
+}
 
 export type Expense = {
   id: string;
