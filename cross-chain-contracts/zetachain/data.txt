@@ -1,0 +1,30 @@
+🔑 Private key: 1e184b255151577b90d8a7494fde2b778451d80061d3d75852d98886553ac8fc
+🔐 Mnemonic phrase: wood borrow fragile entire grunt core relief half tail all major torch
+😃 EVM address: 0x528330B5D500560130C8Ab4DeA1F5C79F2Ff0955
+😃 Bitcoin address: tb1qgggv3a4pflaypcz7f7nssjk6zv0r7v8el009pa
+😃 Bech32 address: zeta122pnpdw4qptqzvxg4dx7586u08e07z247kvvz0
+
+------------------
+
+EVM: 0xB9f9Af07fAd74C23F35CAeC708515782a15911Ba 
+Bitcoin: tb1qmr5ftwth0w29jxyh4yhgufllk8ngrxfxlrey9x
+
+--------------------
+
+🔑 Using account: 0xB9f9Af07fAd74C23F35CAeC708515782a15911Ba
+
+🚀 Successfully deployed contract on ZetaChain.
+📜 Contract address: 0x942a156cd363CC04Eac8577a509D360eFb5453Fa
+🌍 Explorer: https://athens3.explorer.zetachain.com/address/0x942a156cd363CC04Eac8577a509D360eFb5453Fa
+
+-----------
+npx hardhat interact --contract 0x942a156cd363CC04Eac8577a509D360eFb5453Fa --amount 0.1 --target-token 0x48f80608B672DC30DC7e3dbBd0343c5F02C738Eb --recipient 0x2cD3D070aE1BD365909dD859d29F387AA96911e1 --network goerli_testnet
+
+npx hardhat interact --contract 0x942a156cd363CC04Eac8577a509D360eFb5453Fa (smart contract address) --amount 0.1 --target-token(Zerc20-token of the chain) 0x48f80608B672DC30DC7e3dbBd0343c5F02C738Eb --recipient 0x2cD3D070aE1BD365909dD859d29F387AA96911e1 (address of the reciver) --network goerli_testnet
+
+--- MUMBAI TO BTC ---
+npx hardhat interact --contract 0x942a156cd363CC04Eac8577a509D360eFb5453Fa --amount 0.2 --target-token 0x65a45c57636f9BcCeD4fe193A602008578BcA90b --recipient tb1qmr5ftwth0w29jxyh4yhgufllk8ngrxfxlrey9x --network mumbai_testnet
+
+------------------
+yarn hardhat cctx (transcation-hash)
+yarn hardhat cctx 0x38dc3aff34c7b1519887db24fa41c61fdb756b5f437870985b2c7df69268bd5f
