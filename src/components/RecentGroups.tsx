@@ -4,35 +4,18 @@ import {Group} from "types/common";
 import {Text} from "theme";
 import GroupCard from "components/GroupCard";
 import ErrorMessage from "./UI/ErrorMessage";
+import {getGroupDetails, getGroupsOfUser} from "lib/splitwiseHelper";
+import useAppState from "store/AppStore";
 
 const GROUP_CARD_HEIGHT = 43;
 
-async function fetchGroups() {
-    return [
-        {
-            name: "Test Group",
-            settledUp: false,
-            asset: "USDT",
-            transactions: []
-        },
-        {
-            name: "Test Group 2",
-            settledUp: true,
-            asset: "USDT",
-            transactions: []
-        },
-        {
-            name: "Test Group 3",
-            settledUp: false,
-            asset: "USDT",
-            transactions: []
-        },
-    ]
+function ListHeaderComponent() {
+    return <Text variant="heading" color="primaryCardText">Your recent groups</Text>
 }
 
 function RecentGroups() {
     const [isRefreshing, setIsRefreshing] = useState(false);
-
+    const {currentAddress} = useAppState();
     const [groupState, setGroupState] = useState<
         {
             groups: Group[];
@@ -46,6 +29,37 @@ function RecentGroups() {
     });
 
     const {groups, error, loading} = groupState;
+
+    async function fetchGroups() {
+        const groupIds = await getGroupsOfUser(currentAddress!);
+        groups.splice(0);
+        for (const groupId of groupIds) {
+            const groupDetails = await getGroupDetails(groupId);
+            console.log(groupDetails);
+            groups.push(groupDetails);
+        }
+        return groups;
+        // return [
+        //     {
+        //         name: "Test Group",
+        //         settledUp: false,
+        //         asset: "USDT",
+        //         transactions: []
+        //     },
+        //     {
+        //         name: "Test Group 2",
+        //         settledUp: true,
+        //         asset: "USDT",
+        //         transactions: []
+        //     },
+        //     {
+        //         name: "Test Group 3",
+        //         settledUp: false,
+        //         asset: "USDT",
+        //         transactions: []
+        //     },
+        // ]
+    }
 
     useEffect(() => {
         // Fetch groups when the component mounts
@@ -124,8 +138,5 @@ function RecentGroups() {
     );
 }
 
-function ListHeaderComponent() {
-  return <Text variant="heading" color="primaryCardText">Your recent groups</Text>
-}
 
 export default RecentGroups;

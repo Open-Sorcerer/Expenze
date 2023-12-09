@@ -1,66 +1,116 @@
-import React, {useState} from "react";
-import {Button, StyleSheet, TextInput} from "react-native";
-import {Box, theme} from "theme";
-import {AddParticipantProps} from "../../../types/navigation";
+import React, {useEffect, useState} from "react";
+import {FlatList, Pressable, TextInput, useWindowDimensions} from "react-native";
+import {Box, Text} from "theme";
+import useAppState from "store/AppStore";
+import Usdt from "icons/Usdt";
+import {AddParticipantProps} from "types/navigation";
+import {AddressBook, AddressBookEntry, addressBookFetch} from "lib/splitwiseHelper";
 
 function AddParticipant({navigation, route}: AddParticipantProps) {
-    // const navigation = useNavigation();
-    const [participantName, setParticipantName] = useState("");
-    const [participantAddress, setParticipantAddress] = useState("");
-    const [participants, setParticipants] = useState(route.params.participants);
-    const addParticipant = () => {
-        if (participantName.trim() !== "" && participantAddress.trim() !== "") {
-            setParticipants((participants)=>[...participants, {name: participantName, walletAddress: participantAddress}]);
-            setParticipantName("");
-            setParticipantAddress("");
+    const {width} = useWindowDimensions();
+    const {currentAddress} = useAppState();
+    const [participants, setParticipants] = useState<AddressBookEntry[]>(route.params.participants);
+    const [contactList, setContactList] = useState<AddressBook["friendsData"]>([]);
+    const [filteredContacts, setFilteredContacts] = useState<AddressBook["friendsData"]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const fetchData = async () => {
+        try {
+            const fetchedContacts: AddressBook = await addressBookFetch(currentAddress!) as AddressBook;
+            console.log("AddressBook:");
+            console.log(fetchedContacts);
+
+            if (fetchedContacts?.friendsData) {
+                setContactList(fetchedContacts.friendsData);
+                setFilteredContacts(fetchedContacts.friendsData);
+                console.log("ContactList:");
+                console.log(fetchedContacts.friendsData);
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
         }
+    };
+    useEffect(() => {
+        fetchData();
+    }, [currentAddress]);
+
+    const renderItem = ({item}: { item: AddressBook["friendsData"][0] }) => (
+        <Pressable
+            key={item.name}
+            onPress={() => handleAddToGroup(item)}
+        >
+            <Box
+                flex={1}
+                backgroundColor="mainBackground"
+                width={width * 0.90}
+                flexDirection="row"
+                borderColor="secondaryCardText"
+                borderWidth={1}
+                borderRadius={10}
+                p="m"
+                alignItems="center"
+                columnGap="s"
+                mt="s"
+            >
+                <Box flex={0.15}>{getTokenIcon()}</Box>
+
+                <Box flex={1}>
+                    <Text variant="body" color="primaryCardText">
+                        Name: {item.name}
+                    </Text>
+                    <Text color="secondaryCardText">
+                        Address: {item.walletAddress}
+                    </Text>
+                </Box>
+            </Box>
+        </Pressable>
+    );
+
+    const getTokenIcon = () => <Usdt height={34} width={34}/>;
+
+    const handleAddToGroup = (selectedContact: AddressBook["friendsData"][0]) => {
+        // Use the functional form of setParticipants to ensure state updates correctly
+        setParticipants(prevParticipants => [...prevParticipants, selectedContact]);
+
+        // Log the selected contact and updated participants
+        console.log("Selected contact:", selectedContact);
+
+        // Navigate to the CreateGroup screen with the updated participants
+        navigation.navigate("CreateGroup", { participants: [...participants, selectedContact] as AddressBookEntry[] });
+    };
+
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+        const filtered = contactList.filter((contact) =>
+            contact.name.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredContacts(filtered);
     };
 
     return (
-        <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center"
-             backgroundColor="mainBackground" padding="m">
-            <Box flex={1} flexDirection="column" width="100%">
-                <TextInput
-                    style={[styles.inputContainer]}
-                    onChangeText={(text) => setParticipantName(text)}
-                    placeholder="Enter participant name"
-                    placeholderTextColor={theme.colors.secondaryCardText}
-                    selectionColor={theme.colors.accent}
-                    value={participantName}
-                />
-                <TextInput
-                    style={[styles.inputContainer]}
-                    onChangeText={(text) => setParticipantAddress(text)}
-                    placeholder="Enter the Recipient Address"
-                    placeholderTextColor={theme.colors.secondaryCardText}
-                    selectionColor={theme.colors.accent}
-                    value={participantAddress}
-                />
-                <Button title="Add" onPress={addParticipant}/>
-            </Box>
-            <Box flex={1} flexDirection="row"
-                 width="100%"
-                 justifyContent="flex-start"
-                 gap="s"
-                 alignContent="center"
-                 position="absolute"
-                 bottom={60} p="m"
-            >
-                {/* <Button title="Cancel" onPress={() => navigation.navigate("CreateGroup", {participantsList: initialParticipantsList})}/> */}
-                <Button title="Save" onPress={() => navigation.navigate("CreateGroup", {participants})}/>
-            </Box>
+        <Box flex={1} backgroundColor="mainBackground" alignItems="center" gap="m" p="s" height="100%" width="100%">
+            <TextInput
+                style={{
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    width: '90%',
+                    marginBottom: 10,
+                    padding: 10,
+                }}
+                placeholder="Search contacts..."
+                onChangeText={handleSearch}
+                value={searchQuery}
+            />
+            <FlatList
+                data={filteredContacts}
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+            />
         </Box>
     );
 }
-
-const styles = StyleSheet.create({
-    inputContainer: {
-        borderBottomColor: theme.colors.secondaryCardText,
-        borderBottomWidth: 1,
-        padding: 5,
-        marginVertical: 4,
-        color: theme.colors.accent,
-    }
-});
 
 export default AddParticipant;

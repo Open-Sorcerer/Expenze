@@ -2,27 +2,34 @@ import React, {useState} from "react";
 import {Button, FlatList, StyleSheet, TextInput} from "react-native";
 import {Box, Text, theme} from "theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import {AddExpenseProps} from "../../../types/navigation";
-import {participant} from "../../../types/common";
+import {AddExpenseProps} from "types/navigation";
+import {participant} from "types/common";
+import {AddressBookEntry, createExpense} from "lib/splitwiseHelper";
 
 function AddExpense({navigation, route}: AddExpenseProps) {
     const [expenseName, setExpenseName] = useState<string>("");
     const [payer, setPayer] = useState<string>("");
     const [amount, setAmount] = useState<number>(0);
-    const [participants] = useState<participant[]>(
+    const [participants] = useState<AddressBookEntry[]>(
         [...route.params.participants,
-            {name: "Myself", address: "0x0000000000"},
-            {name: "Dummy", address: "0x0000000000"},
-    ]);
+            {name: "Myself", walletAddress: "0x0000000000"},
+            {name: "Dummy", walletAddress: "0x0000000000"},
+        ]);
     const [selectedParticipants, setSelectedParticipants] = useState<participant[]>([]);
 
-    const toggleParticipant = (participant: participant) => {
-        if (selectedParticipants.includes(participant)) {
-            setSelectedParticipants(selectedParticipants.filter(p => p !== participant));
+    const toggleParticipant = (selectedParticipant: participant) => {
+        if (selectedParticipants.includes(selectedParticipant)) {
+            setSelectedParticipants(selectedParticipants.filter(p => p !== selectedParticipant));
         } else {
-            setSelectedParticipants([...selectedParticipants, participant]);
+            setSelectedParticipants([...selectedParticipants, selectedParticipant]);
         }
     };
+
+    const handleExpenseAdd = async () => {
+        await createExpense("0", payer, amount, selectedParticipants.map((p: participant) => p.walletAddress), expenseName, new Date().getTime());
+        console.log("Save button pressed");
+        navigation.navigate("ViewGroup", {participants: selectedParticipants});
+    }
 
     const renderParticipantItem = ({item}: { item: any }) => (
         <Box flexDirection="row" alignItems="center" marginBottom="s">
@@ -94,7 +101,7 @@ function AddExpense({navigation, route}: AddExpenseProps) {
                  bottom={60} p="m"
             >
                 <Button title="Save"
-                        onPress={() => navigation.navigate("CreateGroup", {participants: selectedParticipants})}/>
+                        onPress={handleExpenseAdd}/>
             </Box>
         </Box>
     );

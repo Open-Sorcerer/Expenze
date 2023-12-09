@@ -23,7 +23,9 @@
       "screens/*": ["./screens/*"],
       "store/*": ["./store/*"],
       "utils/*": ["./utils/*"],
-      "theme": ["./theme/index"]
+      "lib/*": ["./lib/*"],
+      "theme": ["./theme/index"],
+      "types/*": ["./types/*"],
     },
     "types": ["react", "react-native"]
   },

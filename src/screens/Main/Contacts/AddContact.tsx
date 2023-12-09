@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import {Button, StyleSheet, TextInput} from "react-native";
 import {Box, theme} from "theme";
 import useAppState from "store/AppStore";
-import {AddContactProps} from "../../../types/navigation";
-import {addressBookAddition, AddressBookEntry, registerUser} from "../../../lib/splitwiseHelper";
+import {AddContactProps} from "types/navigation";
+import {addressBookAddition, AddressBookEntry, registerUser} from "lib/splitwiseHelper";
 
 function AddContact({navigation, route}: AddContactProps) {
     const [contactList, setContactList] = useState(route.params.contactList);

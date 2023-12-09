@@ -1,11 +1,5 @@
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
-
-declare global {
-    namespace ReactNavigation {
-        interface RootParamList extends RootStackParamList {
-        }
-    }
-}
+import {AddressBookEntry} from "lib/splitwiseHelper";
 
 export type RootStackParamList = {
     ConnectWallet: undefined;
@@ -15,26 +9,26 @@ export type RootStackParamList = {
     Debug: undefined;
     Feed: undefined;
     Wallet: undefined;
-    CreateGroup: { participants: { name: string; walletAddress: string }[] };
+    CreateGroup: { participants: AddressBookEntry[] };
     FeedHome: undefined;
-    ViewGroup: undefined;
-    AddParticipant: { participants: { name: string; walletAddress: string }[] };
-    AddExpense: { participants: { name: string; walletAddress: string }[] };
+    ViewGroup: { participants: AddressBookEntry[] };
+    AddParticipant: { participants: AddressBookEntry[] };
+    AddExpense: { participants: AddressBookEntry[] };
     AddressBook: undefined;
-    AddContact: { contactList: { name: string; walletAddress: string }[] };
+    AddContact: { contactList: AddressBookEntry[] };
 };
 
 export type FeedStackParamList = {
     FeedHome: undefined;
-    CreateGroup: { participants: { name: string; walletAddress: string }[] };
-    ViewGroup: undefined;
-    AddParticipant: { participants: { name: string; walletAddress: string }[] };
-    AddExpense: { participants: { name: string; walletAddress: string }[] };
+    CreateGroup: { participants: AddressBookEntry[] };
+    ViewGroup: { participants: AddressBookEntry[] };
+    AddParticipant: { participants: AddressBookEntry[] };
+    AddExpense: { participants: AddressBookEntry[] };
 };
 
 export type ContactsStackParamList = {
     AddressBook: undefined;
-    AddContact: { contactList: { name: string; walletAddress: string }[] };
+    AddContact: { contactList: AddressBookEntry[] };
 };
 
 // RootStackParamList
@@ -87,3 +81,10 @@ export type AddContactProps = NativeStackScreenProps<
     ContactsStackParamList,
     "AddContact"
 >;
+
+declare global {
+    namespace ReactNavigation {
+        interface RootParamList extends RootStackParamList {
+        }
+    }
+}

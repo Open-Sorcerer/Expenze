@@ -10,9 +10,17 @@ import {
   useWalletClient,
   usePrepareContractWrite,
 } from "wagmi";
+import { ethers } from "ethers";
 import routerABI from "../../cross-chain-contracts/ccip/abi/Router.json";
 import tokenABI from "../../cross-chain-contracts/ccip/abi/IERC20Metadata.json";
 
+interface message {
+  receiverAddress: string; // convert the address to bytes
+  data: string; // convert the data to bytes use "0x" for the data // hardcode
+  tokensToSend: tokenAmounts[];
+  feeTokenAddress: string; // address(0) for native and address(1) for LINK
+  extraArgs: any; // make an interface for this
+}
 const useCCIPTransfer = () => {
   const client = usePublicClient({
     chainId: 43_113,
@@ -45,14 +53,44 @@ const useCCIPTransfer = () => {
       destinationAddress,
       amount
     );
+
+    const sendingMessage: message = {
+      receiverAddress: destinationAddress,
+      data: "0x",
+      tokensToSend: [
+        {
+          tokenAddress: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+          amount,
+        },
+      ],
+      feeTokenAddress: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+      extraArgs: "",
+    };
+
+    // const message = {
+    //   receiver: ethers.utils.defaultAbiCoder.encode(
+    //     ["address"],
+    //     [destinationAccount]
+    //   ),
+    //   data: "0x", // no data
+    //   tokenAmounts: tokenAmounts,
+    //   feeToken: feeTokenAddress
+    //     ? feeTokenAddress
+    //     : ethers.constants.AddressZero, // If fee token address is provided then fees must be paid in fee token.
+    //   extraArgs: encodedExtraArgs,
+    // };
     const routerPrepareContractWrite = usePrepareContractWrite({
       address: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
       abi: routerABI,
       functionName: "ccipSend",
-      args: [],
+      args: [destinationChainIDDB.OptimismGoerli, sendingMessage],
     });
 
     console.log("routerPrepareContractWrite", routerPrepareContractWrite);
+
+    const { data } = useContractWrite(routerPrepareContractWrite.config);
+
+    console.log(data?.hash);
 
     // const contractWrite = useContractWrite(routerPrepareContractWrite.config);
 
