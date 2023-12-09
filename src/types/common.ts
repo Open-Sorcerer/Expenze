@@ -24,6 +24,7 @@ export type RawContract = {
 export interface Group {
   groupName: string;
   users: string[];
+  groupId: number,
   expenses: expense[];
   settllingTxns: settlingTxnsEntry[];
   groupDescription: string;

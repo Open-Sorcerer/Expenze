@@ -4,8 +4,6 @@ import {Pressable, useWindowDimensions} from "react-native";
 import {Box, Text} from "theme";
 import {Group} from "types/common";
 import {useNavigation} from "@react-navigation/native";
-import {AddressBookEntry} from "lib/splitwiseHelper";
-import useAppState from "store/AppStore";
 
 type Props = {
     group: Group;
@@ -14,16 +12,10 @@ type Props = {
 function GroupCard({group}: Props) {
     const {width} = useWindowDimensions();
     const navigation = useNavigation();
-    const {currentAddress} = useAppState();
     return (
         <Pressable
             key={group.groupName}
-            onPress={() => navigation.navigate("ViewGroup", {
-                participants: [{
-                    name: "You",
-                    walletAddress: currentAddress!
-                } as AddressBookEntry]
-            })}
+            onPress={() => navigation.navigate("ViewGroup", {group})}
         >
             <Box
                 flex={1}
