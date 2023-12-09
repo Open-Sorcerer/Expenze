@@ -430,6 +430,12 @@ export const getGroupsOfUser = async (user: string) => {
   return groups;
 };
 
+export const getGroupDetails = async (groupId: string) => {
+  const groupData = (await redis1.get(`group:${groupId}`)) as Group;
+
+  return groupData;
+};
+
 export const settleExpense = async (groupId: string) => {
   // fetch all the expenses in the group
 
