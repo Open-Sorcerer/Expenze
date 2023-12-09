@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {Button, FlatList, StyleSheet, TextInput} from "react-native";
 import {Box, Text, theme} from "theme";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {AddExpenseProps} from "../../../types/navigation";
 import {participant} from "../../../types/common";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-const AddExpense = ({navigation, route}: AddExpenseProps) => {
+function AddExpense({navigation, route}: AddExpenseProps) {
     const [expenseName, setExpenseName] = useState<string>("");
     const [payer, setPayer] = useState<string>("");
     const [amount, setAmount] = useState<number>(0);
@@ -25,11 +25,11 @@ const AddExpense = ({navigation, route}: AddExpenseProps) => {
     };
 
     const renderParticipantItem = ({item}: { item: any }) => (
-        <Box flexDirection="row" alignItems="center" marginBottom={"s"}>
-            {/*<CheckBox*/}
-            {/*    value={selectedParticipants.includes(item)}*/}
-            {/*    onValueChange={() => toggleParticipant(item)}*/}
-            {/*/>*/}
+        <Box flexDirection="row" alignItems="center" marginBottom="s">
+            {/* <CheckBox */}
+            {/*    value={selectedParticipants.includes(item)} */}
+            {/*    onValueChange={() => toggleParticipant(item)} */}
+            {/* /> */}
             <BouncyCheckbox
                 size={25}
                 fillColor="red"
@@ -41,16 +41,16 @@ const AddExpense = ({navigation, route}: AddExpenseProps) => {
                 isChecked={selectedParticipants.includes(item)}
                 onPress={() => toggleParticipant(item)}
             />
-            <Box marginLeft={"s"}>
-                <Text variant={"body"}>{item.name}</Text>
+            <Box marginLeft="s">
+                <Text variant="body">{item.name}</Text>
             </Box>
         </Box>
     );
 
     return (
-        <Box flex={1} flexDirection={"column"} justifyContent={"space-between"} alignContent={"center"}
+        <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center"
              backgroundColor="mainBackground" padding="m">
-            <Box flex={1} flexDirection={"column"} width={"100%"}>
+            <Box flex={1} flexDirection="column" width="100%">
                 <TextInput
                     style={[styles.inputContainer]}
                     onChangeText={(text) => setExpenseName(text)}
@@ -85,20 +85,20 @@ const AddExpense = ({navigation, route}: AddExpenseProps) => {
                     renderItem={renderParticipantItem}
                 />
             </Box>
-            <Box flex={1} flexDirection={"row"}
-                 width={"100%"}
-                 justifyContent={"flex-start"}
-                 gap={"s"}
-                 alignContent={"center"}
-                 position={"absolute"}
-                 bottom={60} p={"m"}
+            <Box flex={1} flexDirection="row"
+                 width="100%"
+                 justifyContent="flex-start"
+                 gap="s"
+                 alignContent="center"
+                 position="absolute"
+                 bottom={60} p="m"
             >
                 <Button title="Save"
                         onPress={() => navigation.navigate("CreateGroup", {participants: selectedParticipants})}/>
             </Box>
         </Box>
     );
-};
+}
 
 const styles = StyleSheet.create({
     inputContainer: {

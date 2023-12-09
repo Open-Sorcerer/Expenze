@@ -3,7 +3,7 @@ import {Button, StyleSheet, TextInput} from "react-native";
 import {Box, theme} from "theme";
 import {AddParticipantProps} from "../../../types/navigation";
 
-const AddParticipant = ({navigation, route}: AddParticipantProps) => {
+function AddParticipant({navigation, route}: AddParticipantProps) {
     // const navigation = useNavigation();
     const [participantName, setParticipantName] = useState("");
     const [participantAddress, setParticipantAddress] = useState("");
@@ -17,9 +17,9 @@ const AddParticipant = ({navigation, route}: AddParticipantProps) => {
     };
 
     return (
-        <Box flex={1} flexDirection={"column"} justifyContent={"space-between"} alignContent={"center"}
+        <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center"
              backgroundColor="mainBackground" padding="m">
-            <Box flex={1} flexDirection={"column"} width={"100%"}>
+            <Box flex={1} flexDirection="column" width="100%">
                 <TextInput
                     style={[styles.inputContainer]}
                     onChangeText={(text) => setParticipantName(text)}
@@ -31,27 +31,27 @@ const AddParticipant = ({navigation, route}: AddParticipantProps) => {
                 <TextInput
                     style={[styles.inputContainer]}
                     onChangeText={(text) => setParticipantAddress(text)}
-                    placeholder={`Enter the Recipient Address`}
+                    placeholder="Enter the Recipient Address"
                     placeholderTextColor={theme.colors.secondaryCardText}
                     selectionColor={theme.colors.accent}
                     value={participantAddress}
                 />
                 <Button title="Add" onPress={addParticipant}/>
             </Box>
-            <Box flex={1} flexDirection={"row"}
-                 width={"100%"}
-                 justifyContent={"flex-start"}
-                 gap={"s"}
-                 alignContent={"center"}
-                 position={"absolute"}
-                 bottom={60} p={"m"}
+            <Box flex={1} flexDirection="row"
+                 width="100%"
+                 justifyContent="flex-start"
+                 gap="s"
+                 alignContent="center"
+                 position="absolute"
+                 bottom={60} p="m"
             >
-                {/*<Button title="Cancel" onPress={() => navigation.navigate("CreateGroup", {participantsList: initialParticipantsList})}/>*/}
+                {/* <Button title="Cancel" onPress={() => navigation.navigate("CreateGroup", {participantsList: initialParticipantsList})}/> */}
                 <Button title="Save" onPress={() => navigation.navigate("CreateGroup", {participants})}/>
             </Box>
         </Box>
     );
-};
+}
 
 const styles = StyleSheet.create({
     inputContainer: {

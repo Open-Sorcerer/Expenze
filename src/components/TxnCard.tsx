@@ -13,7 +13,7 @@ type Props = {
   transaction: Transaction;
 };
 
-const TxnCard = ({ transaction }: Props) => {
+function TxnCard({ transaction }: Props) {
   const { width } = useWindowDimensions();
   return (
     <Box
@@ -33,7 +33,7 @@ const TxnCard = ({ transaction }: Props) => {
       </Box>
     </Box>
   );
-};
+}
 
 const getTokenIcon = (assetName: string) => {
   switch (assetName) {

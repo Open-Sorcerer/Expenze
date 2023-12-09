@@ -4,11 +4,15 @@
     "node": true,
     "react-native/react-native": true
   },
-  "extends": ["plugin:react/recommended",
+  "extends": [
+    "plugin:react/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "airbnb", "airbnb/hooks", "prettier"],
+    "airbnb",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -16,9 +20,23 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "react-native"],
+  "plugins": [
+    "react",
+    "react-native",
+    "@typescript-eslint"
+  ],
   "rules": {
-    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -29,11 +47,23 @@
         "tsx": "never"
       }
     ],
-    "no-use-before-define": ["error", { "variables": false }],
+    "no-use-before-define": [
+      "error",
+      {
+        "variables": false
+      }
+    ],
     "react/prop-types": [
       "error",
-      { "ignore": ["navigation", "navigation.navigate"] }
-    ]
+      {
+        "ignore": [
+          "navigation",
+          "navigation.navigate"
+        ]
+      }
+    ],
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "settings": {
     "import/resolver": {
@@ -41,8 +71,17 @@
         "directory": "./tsconfig.json"
       },
       "node": {
-        "extensions": [".ts", ".tsx", ".js", ".jsx", ".native.js"],
-        "moduleDirectory": ["node_modules", "src/"]
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".jsx",
+          ".native.js"
+        ],
+        "moduleDirectory": [
+          "node_modules",
+          "src/"
+        ]
       }
     }
   }

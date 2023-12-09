@@ -1,7 +1,8 @@
 import * as React from "react";
 import Svg, { SvgProps, G, Circle, Path } from "react-native-svg";
-const Usdc = (props: SvgProps) => (
-  <Svg
+
+function Usdc(props: SvgProps) {
+  return <Svg
     viewBox="0 0 32 32"
     fill="#000000"
     {...props}
@@ -22,5 +23,5 @@ const Usdc = (props: SvgProps) => (
       </G>
     </G>
   </Svg>
-);
+}
 export default Usdc;

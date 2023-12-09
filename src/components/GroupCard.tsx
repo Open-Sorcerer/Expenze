@@ -9,9 +9,9 @@ type Props = {
   group: Group;
 };
 
-const GroupCard = ({ group }: Props) => {
+function GroupCard({ group }: Props) {
   const { width } = useWindowDimensions();
-  let navigation = useNavigation();
+  const navigation = useNavigation();
   return (
     <Pressable
       key={group.name}
@@ -22,15 +22,15 @@ const GroupCard = ({ group }: Props) => {
         backgroundColor="mainBackground"
         width={width * 0.9}
         flexDirection="row"
-        borderColor={"secondaryCardText"}
+        borderColor="secondaryCardText"
         borderWidth={1}
         borderRadius={10}
         p="m"
         alignItems="center"
-        columnGap={"s"}
-        mt={"s"}
+        columnGap="s"
+        mt="s"
       >
-        {/*<Box flex={0.15}>{getTokenIcon(group.asset)}</Box>*/}
+        {/* <Box flex={0.15}>{getTokenIcon(group.asset)}</Box> */}
         <Box flex={0.15}>{getTokenIcon()}</Box>
 
         <Box flex={1}>
@@ -44,12 +44,10 @@ const GroupCard = ({ group }: Props) => {
       </Box>
     </Pressable>
   );
-};
+}
 
 const getTokenIcon = () =>
   // assetName: string
-  {
-    return <Usdt height={34} width={34} />;
-  };
+  <Usdt height={34} width={34} />;
 
 export default React.memo(GroupCard);

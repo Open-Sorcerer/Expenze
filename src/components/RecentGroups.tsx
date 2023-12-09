@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {ActivityIndicator, FlatList, RefreshControl} from "react-native";
 import {Group} from "types/common";
-import ErrorMessage from "./UI/ErrorMessage";
 import {Text} from "theme";
 import GroupCard from "components/GroupCard";
+import ErrorMessage from "./UI/ErrorMessage";
 
 const GROUP_CARD_HEIGHT = 43;
 
@@ -30,7 +30,7 @@ async function fetchGroups() {
     ]
 }
 
-const RecentGroups = () => {
+function RecentGroups() {
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [groupState, setGroupState] = useState<
@@ -73,7 +73,7 @@ const RecentGroups = () => {
         return <ErrorMessage message="Failed to load groups"/>;
     }
     if (loading) {
-        return <ActivityIndicator size={"small"}/>;
+        return <ActivityIndicator size="small"/>;
     }
 
     const handleRefresh = async () => {
@@ -95,9 +95,7 @@ const RecentGroups = () => {
     });
     const renderItem = ({item}: {
         item: Group
-    }) => {
-        return <GroupCard group={item}/>;
-    };
+    }) => <GroupCard group={item}/>;
 
     const keyExtractor = (_: unknown, index: number) => index.toString();
 
@@ -124,10 +122,10 @@ const RecentGroups = () => {
             ListHeaderComponent={<ListHeaderComponent/>}
         />
     );
-};
+}
 
-const ListHeaderComponent = () => (
-    <Text variant={"heading"} color="primaryCardText">Your recent groups</Text>
-);
+function ListHeaderComponent() {
+  return <Text variant="heading" color="primaryCardText">Your recent groups</Text>
+}
 
 export default RecentGroups;

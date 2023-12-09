@@ -6,9 +6,9 @@ type Props = {
   userAddress: string;
 };
 
-const Address = ({ userAddress }: Props) => {
+function Address({ userAddress }: Props) {
   const formattedAddress = formatEthAddress(userAddress);
   return <Text color="primaryCardText">{formattedAddress}</Text>;
-};
+}
 
 export default Address;

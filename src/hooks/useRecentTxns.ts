@@ -13,7 +13,7 @@ const useEthereumTransactions = () => {
   const fetchTransactions = async (controller: AbortController) => {
     try {
       const baseURL = ALCHMEY_RPC_URL;
-      let data = JSON.stringify({
+      const data = JSON.stringify({
         method: "alchemy_getAssetTransfers",
         params: [
           {

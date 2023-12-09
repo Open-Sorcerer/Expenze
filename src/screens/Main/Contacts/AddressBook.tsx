@@ -1,19 +1,26 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Text} from "theme";
 import {Button, FlatList, useWindowDimensions} from "react-native";
 import Usdt from "icons/Usdt";
 import formatEthAddress from "utils/formatEthAddress";
 import {useWalletConnectModal} from "@walletconnect/modal-react-native";
 import {useNavigation} from "@react-navigation/native";
+import useAppState from "store/AppStore";
+import {AddressBook, addressBookFetch} from "../../../lib/splitwiseHelper";
 
-function AddressBook() {
+function AddressBookie() {
     const {width} = useWindowDimensions();
+    const {currentAddress} = useAppState();
     const navigation = useNavigation();
     const [contactList] = useState([
         {name: "suvraneel.lens", address: formatEthAddress(useWalletConnectModal().address)},
         {name: "saviour1001.eth", address: formatEthAddress("0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a")},
     ]);
-
+    const contacts: AddressBook = addressBookFetch(currentAddress!) as unknown as AddressBook;
+    useEffect(() => {
+        console.log("AddressBook:");
+        console.log(contacts);
+    }, [contacts]);
     const renderItem = ({item}: { item: any }) => (
         <Box
             flex={1}
@@ -70,4 +77,4 @@ function AddressBook() {
     );
 }
 
-export default AddressBook;
+export default AddressBookie;

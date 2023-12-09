@@ -2,12 +2,12 @@ import React, { PropsWithChildren } from "react";
 import { WagmiConfig } from "wagmi";
 import { goerli, mainnet, polygonMumbai } from "viem/chains";
 import { APP_NAME, APP_DESC, PROJECT_WEBSITE } from "constants/index";
-import app from "../../app.json";
 import {
   Web3Modal,
   createWeb3Modal,
   defaultWagmiConfig,
 } from "@web3modal/wagmi-react-native";
+import app from "../../app.json";
 
 const projectId = "12ec7a1505f427fa14f206ee09caf06f";
 
@@ -31,13 +31,11 @@ const wagmiConfig = defaultWagmiConfig({
 });
 
 createWeb3Modal({ projectId, chains, wagmiConfig });
-const WagmiProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  return (
+const WagmiProvider: React.FC<PropsWithChildren> = ({ children }) => (
     <WagmiConfig config={wagmiConfig}>
       {children}
       <Web3Modal />
     </WagmiConfig>
   );
-};
 
 export default WagmiProvider;

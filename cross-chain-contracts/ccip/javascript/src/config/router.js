@@ -76,7 +76,7 @@ const getRouterConfig = (network) => {
     case "polygonMumbai":
       return polygonMumbai;
     default:
-      throw new Error("Unknown network: " + network);
+      throw new Error(`Unknown network: ${  network}`);
   }
 };
 

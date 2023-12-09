@@ -1,4 +1,8 @@
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
+import React, { useState } from "react";
+import { Alert, Button, StyleSheet, TextInput } from "react-native";
+import { Box, theme } from "theme";
+import formatEthAddress from "utils/formatEthAddress";
 import {
   registerUser,
   settleExpense,
@@ -6,12 +10,8 @@ import {
   updateUserDetails,
   createGroup,
 } from "../lib/splitwiseHelper";
-import React, { useState } from "react";
-import { Alert, Button, StyleSheet, TextInput } from "react-native";
-import { Box, theme } from "theme";
-import formatEthAddress from "utils/formatEthAddress";
 
-const SendToken = () => {
+function SendToken() {
   const { address, provider } = useWalletConnectModal();
   const [sendTxConfig, setSendTxConfig] = useState({
     toAddress: address,
@@ -35,7 +35,7 @@ const SendToken = () => {
       }
       const intValue = parseInt(sendTxConfig.ammount, 10);
       const intGweiValue = intValue * 10 ** 18;
-      const hexAmount = "0x" + intGweiValue.toString(16);
+      const hexAmount = `0x${  intGweiValue.toString(16)}`;
 
       const txnParams = [
         {
@@ -61,8 +61,8 @@ const SendToken = () => {
   return (
     <Box
       p="s"
-      width={"98%"}
-      borderColor={"secondaryCardText"}
+      width="98%"
+      borderColor="secondaryCardText"
       borderWidth={2}
       borderRadius={4}
     >
@@ -99,10 +99,10 @@ const SendToken = () => {
         disabled={!sendTxConfig.ammount || !sendTxConfig.toAddress}
       />
 
-      <Button title={"Hello"} onPress={hello} />
+      <Button title="Hello" onPress={hello} />
     </Box>
   );
-};
+}
 
 export default React.memo(SendToken);
 

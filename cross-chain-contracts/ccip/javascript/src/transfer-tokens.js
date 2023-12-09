@@ -1,13 +1,13 @@
 // Import necessary modules and data
+const fs = require("fs");
+//  import fs from "fs";
+const ethers = require("ethers");
 const {
   getProviderRpcUrl,
   getRouterConfig,
   getPrivateKey,
   getMessageState,
 } = require("./config");
-const fs = require("fs");
-//  import fs from "fs";
-const ethers = require("ethers");
 const routerAbi = require("../../abi/Router.json");
 const offRampAbi = require("../../abi/OffRamp.json");
 const erc20Abi = require("../../abi/IERC20Metadata.json");
@@ -117,7 +117,7 @@ const transferTokens = async () => {
   const tokenAmounts = [
     {
       token: tokenAddress,
-      amount: amount,
+      amount,
     },
   ];
 
@@ -143,8 +143,8 @@ const transferTokens = async () => {
       [destinationAccount]
     ),
     data: "0x", // no data
-    tokenAmounts: tokenAmounts,
-    feeToken: feeTokenAddress ? feeTokenAddress : ethers.constants.AddressZero, // If fee token address is provided then fees must be paid in fee token.
+    tokenAmounts,
+    feeToken: feeTokenAddress || ethers.constants.AddressZero, // If fee token address is provided then fees must be paid in fee token.
     extraArgs: encodedExtraArgs,
   };
 
@@ -171,7 +171,7 @@ const transferTokens = async () => {
 
   // Create a contract instance for the token using its ABI and address
   const erc20 = new ethers.Contract(tokenAddress, erc20Abi, signer);
-  let sendTx, approvalTx;
+  let sendTx; let approvalTx;
 
   if (!feeTokenAddress) {
     // Pay native
@@ -336,9 +336,9 @@ fs.writeFile("data.json", JSON.stringify(arguements), (err) => {
         );
 
         // Check if an event with the specific messageId exists and log its status
-        for (let event of events) {
+        for (const event of events) {
           if (event.args && event.args.messageId === messageId) {
-            const state = event.args.state;
+            const {state} = event.args;
             const status = getMessageState(state);
             console.log(
               `\n✅Status of message ${messageId} is ${status} - Check the explorer https://ccip.chain.link/msg/${messageId}`

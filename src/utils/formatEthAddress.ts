@@ -11,7 +11,7 @@ function formatEthAddress(
   }
 
   if (!address.startsWith("0x")) {
-    address = "0x" + address;
+    address = `0x${  address}`;
   }
 
   const prefix = address.substring(0, prefixLength + 2); // Add 2 for "0x" prefix

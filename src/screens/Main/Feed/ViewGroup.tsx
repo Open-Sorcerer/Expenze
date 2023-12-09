@@ -5,9 +5,9 @@ import Usdt from "icons/Usdt";
 import {useNavigation} from "@react-navigation/native";
 import {participant} from "../../../types/common";
 
-const ViewGroup = () => {
+function ViewGroup() {
     const { width } = useWindowDimensions();
-    let navigation = useNavigation();
+    const navigation = useNavigation();
     const [expensesList, setExpensesList] = useState([
         { name: "Dinner", amount: 0 },
     ]);
@@ -30,7 +30,7 @@ const ViewGroup = () => {
     }
 
     return (
-        <Box flex={1} flexDirection={"column"} justifyContent={"space-between"} alignContent={"center"} backgroundColor="mainBackground" padding="m">
+        <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center" backgroundColor="mainBackground" padding="m">
             <FlatList
                 data={expensesList}
                 keyExtractor={(_, index) => index.toString()}
@@ -40,13 +40,13 @@ const ViewGroup = () => {
                         backgroundColor="mainBackground"
                         width={width * 0.90}
                         flexDirection="row"
-                        borderColor={"secondaryCardText"}
+                        borderColor="secondaryCardText"
                         borderWidth={1}
                         borderRadius={10}
                         p="m"
                         alignItems="center"
-                        columnGap={"s"}
-                        mt={"s"}
+                        columnGap="s"
+                        mt="s"
                     >
                         <Box flex={0.15}>{getTokenIcon()}</Box>
 
@@ -62,7 +62,7 @@ const ViewGroup = () => {
                 )}
                 showsVerticalScrollIndicator={false}
             />
-            <Box flex={1} flexDirection={"column"} width={"100%"}>
+            <Box flex={1} flexDirection="column" width="100%">
                 <TextInput
                     style={styles.inputContainer}
                     onChangeText={(text) => setExpenseName(text)}
@@ -75,7 +75,7 @@ const ViewGroup = () => {
                     style={styles.inputContainer}
                     keyboardType="numeric"
                     onChangeText={(text) => setExpenseAmount(text)}
-                    placeholder={`Enter the Amount`}
+                    placeholder="Enter the Amount"
                     placeholderTextColor={theme.colors.secondaryCardText}
                     selectionColor={theme.colors.accent}
                     value={expenseAmount}
@@ -84,13 +84,13 @@ const ViewGroup = () => {
                 <Button title="lfg"
                         onPress={() => navigation.navigate("AddExpense", {participants})}/>
             </Box>
-            <Box flex={1} flexDirection={"row"} width={"100%"} justifyContent={"flex-start"} gap={"s"} alignContent={"center"} position={"absolute"} bottom={60} p={"m"}>
+            <Box flex={1} flexDirection="row" width="100%" justifyContent="flex-start" gap="s" alignContent="center" position="absolute" bottom={60} p="m">
                 <Button title="Cancel" onPress={() => navigation.navigate("FeedHome")} />
                 <Button title="Save" onPress={onSave} />
             </Box>
         </Box>
     );
-};
+}
 
 const styles = StyleSheet.create({
     inputContainer: {
@@ -104,6 +104,4 @@ const styles = StyleSheet.create({
 
 export default ViewGroup;
 
-const getTokenIcon = () => {
-    return <Usdt height={34} width={34} />;
-};
+const getTokenIcon = () => <Usdt height={34} width={34} />;

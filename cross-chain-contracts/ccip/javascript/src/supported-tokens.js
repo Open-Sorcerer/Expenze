@@ -1,6 +1,6 @@
 // Import necessary modules and data
-const { getProviderRpcUrl, getRouterConfig } = require("./config");
 const ethers = require("ethers");
+const { getProviderRpcUrl, getRouterConfig } = require("./config");
 const routerAbi = require("../../abi/Router.json");
 const erc20Abi = require("../../abi/IERC20Metadata.json");
 

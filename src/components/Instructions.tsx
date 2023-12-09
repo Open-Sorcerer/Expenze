@@ -14,7 +14,7 @@ const Data = [
   },
 ];
 
-const Instructions = () => {
+function Instructions() {
   return (
     <Box
       backgroundColor="mainBackground"
@@ -27,16 +27,14 @@ const Instructions = () => {
       <Text color="primaryCardText" variant="body">
         Just Add this two and you are good to go
       </Text>
-      {Data.map((item) => {
-        return (
+      {Data.map((item) => (
           <Instruction detail={item.instruction} id={item.id} key={item.id} />
-        );
-      })}
+        ))}
     </Box>
   );
-};
+}
 
-const Instruction = ({ detail, id }: { detail: string; id: number }) => {
+function Instruction({ detail, id }: { detail: string; id: number }) {
   return (
     <Box m="s">
       <Text color="primaryCardText">
@@ -44,6 +42,6 @@ const Instruction = ({ detail, id }: { detail: string; id: number }) => {
       </Text>
     </Box>
   );
-};
+}
 
 export default Instructions;

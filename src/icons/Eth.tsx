@@ -1,7 +1,8 @@
 import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
-const Eth = (props: SvgProps) => (
-  <Svg
+
+function Eth(props: SvgProps) {
+  return <Svg
     width={46}
     height={46}
     viewBox="0 0 46 46"
@@ -45,5 +46,5 @@ const Eth = (props: SvgProps) => (
       fill="#000"
     />
   </Svg>
-);
+}
 export default Eth;

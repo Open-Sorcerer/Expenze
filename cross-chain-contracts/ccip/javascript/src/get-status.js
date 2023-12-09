@@ -1,10 +1,10 @@
 // Import the required modules and configuration functions
+const ethers = require("ethers");
 const {
   getProviderRpcUrl,
   getRouterConfig,
   getMessageState,
 } = require("./config");
-const ethers = require("ethers");
 const routerAbi = require("../../abi/Router.json");
 const offRampAbi = require("../../abi/OffRamp.json");
 const onRampAbi = require("../../abi/OnRamp.json");
@@ -105,9 +105,9 @@ const getStatus = async () => {
       const events = await offRampContract.queryFilter("ExecutionStateChanged");
 
       // Check if an event with the specific messageId exists and log its status
-      for (let event of events) {
+      for (const event of events) {
         if (event.args && event.args.messageId === messageId) {
-          const state = event.args.state;
+          const {state} = event.args;
           const status = getMessageState(state);
           console.log(`Status of message ${messageId} is ${status}`);
           return;

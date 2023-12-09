@@ -9,7 +9,7 @@ import AddExpense from "screens/Main/Feed/AddExpense";
 
 const Stack = createNativeStackNavigator<FeedStackParamList>();
 
-const FeedStackNavigator = () => {
+function FeedStackNavigator() {
     // const {activeTheme} = useThemeStore();
     // const isDarkTheme = activeTheme === "dark";
     // const statusBarBg = isDarkTheme
@@ -19,7 +19,7 @@ const FeedStackNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name={"FeedHome"}
+                name="FeedHome"
                 component={FeedHome}
                 options={{headerShown: false}}
             />
@@ -42,17 +42,17 @@ const FeedStackNavigator = () => {
                 }}
             />
             <Stack.Screen
-                name={"AddParticipant"}
+                name="AddParticipant"
                 component={AddParticipant}
                 options={{headerShown: false}}
             />
             <Stack.Screen
-                name={"AddExpense"}
+                name="AddExpense"
                 component={AddExpense}
                 options={{headerShown: false}}
             />
         </Stack.Navigator>
     );
-};
+}
 
 export default FeedStackNavigator;

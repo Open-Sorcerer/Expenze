@@ -28,14 +28,14 @@ const ConnectWallet: FC<ConnectWalletProps> = ({navigation}) => {
             gap="xxl"
         >
             <Image source={require("../../../assets/Cards.png")} style={{width: 400, height: 400}}/>
-            {/*<Instructions />*/}
+            {/* <Instructions /> */}
             <Box
                 flex={1}
                 justifyContent="flex-start"
                 alignItems="center"
                 gap="l"
             >
-                <Text variant="heading" textAlign={"center"} fontWeight={"700"}>Make your money{"\n"} move with
+                <Text variant="heading" textAlign="center" fontWeight="700">Make your money{"\n"} move with
                     you</Text>
                 {isConnected && address ? (
                     <Address userAddress={address}/>
@@ -49,7 +49,7 @@ const ConnectWallet: FC<ConnectWalletProps> = ({navigation}) => {
 
 export default ConnectWallet;
 
-const ConnectWalletButton = () => {
+function ConnectWalletButton() {
     const {open} = useWeb3Modal();
     const connectWalletAsync = async () => {
         try {
@@ -59,4 +59,4 @@ const ConnectWalletButton = () => {
         }
     };
     return <Button title="Connect Wallet" onPress={connectWalletAsync}/>;
-};
+}

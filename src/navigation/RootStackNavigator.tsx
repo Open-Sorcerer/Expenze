@@ -32,7 +32,7 @@ const headerRight = () => {
     );
 };
 
-const RootStackNavigator = () => {
+function RootStackNavigator() {
     const {activeTheme} = useThemeStore();
 
     const isDarkTheme = activeTheme === "dark";
@@ -82,7 +82,7 @@ const RootStackNavigator = () => {
                     }}
                     initialRouteName="ConnectWallet"
                 >
-                    <Stack.Group key={"Auth Screens"}>
+                    <Stack.Group key="Auth Screens">
                         <Stack.Screen name="ConnectWallet" component={ConnectWallet}/>
                         <Stack.Screen name="SignInWithEth" component={SignInWithEth}/>
                     </Stack.Group>
@@ -106,6 +106,6 @@ const RootStackNavigator = () => {
             </NavigationContainer>
         </ThemeProvider>
     );
-};
+}
 
 export default RootStackNavigator;

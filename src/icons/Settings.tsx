@@ -1,7 +1,8 @@
 import * as React from "react";
 import Svg, { G, Circle, Path, SvgProps } from "react-native-svg";
 import useThemeStore from "store/ThemeStore";
-const SettingIcon = (props: SvgProps) => {
+
+function SettingIcon(props: SvgProps) {
   const { activeTheme } = useThemeStore();
   const strokeColor = activeTheme === "dark" ? "white" : "black";
   return (
@@ -15,5 +16,5 @@ const SettingIcon = (props: SvgProps) => {
       </G>
     </Svg>
   );
-};
+}
 export default SettingIcon;

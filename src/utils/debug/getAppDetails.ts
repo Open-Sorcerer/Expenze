@@ -7,10 +7,10 @@ type AppDetails = {
 };
 
 export default function getAppDetails(): AppDetails {
-  //@ts-expect-error
+  // @ts-expect-error
   const isHermesEnabled = String(!!global.HermesInternal);
   const uiManager =
-    //@ts-expect-error
+    // @ts-expect-error
     typeof global?.nativeFabricUIManager === "object" ? "Fabric" : "Paper";
 
   const isNewArchitectureEnabled = String(uiManager === "Fabric");

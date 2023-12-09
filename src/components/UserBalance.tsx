@@ -3,7 +3,7 @@ import { useBalance } from "wagmi";
 import { Box, Text } from "theme";
 import useAppState from "store/AppStore";
 
-const UserBalance = () => {
+function UserBalance() {
   const { currentAddress } = useAppState();
   const { data, isLoading } = useBalance({
     address: currentAddress as `0x${string}`,
@@ -11,7 +11,7 @@ const UserBalance = () => {
     watch:true
   });
   return (
-    <Box bg={"mainBackground"}>
+    <Box bg="mainBackground">
       {isLoading ? (
         <Box backgroundColor="primaryCardText" />
       ) : (
@@ -21,6 +21,6 @@ const UserBalance = () => {
       )}
     </Box>
   );
-};
+}
 
 export default UserBalance;

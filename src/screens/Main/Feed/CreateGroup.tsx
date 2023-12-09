@@ -5,7 +5,7 @@ import Usdt from "icons/Usdt";
 import {createGroup} from "../../../lib/splitwiseHelper";
 import {CreateGroupProps} from "../../../types/navigation";
 
-const CreateGroup = ({navigation, route}: CreateGroupProps) => {
+function CreateGroup({navigation, route}: CreateGroupProps) {
     const {width} = useWindowDimensions();
     const [groupName, setGroupName] = useState("");
     const [groupDescription, setGroupDescription] = useState("");
@@ -20,7 +20,7 @@ const CreateGroup = ({navigation, route}: CreateGroupProps) => {
     };
 
     return (
-        <Box flex={1} flexDirection={"column"} justifyContent={"space-between"} alignContent={"center"}
+        <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center"
              backgroundColor="mainBackground" padding="m">
             <TextInput
                 style={styles.inputContainer}
@@ -51,14 +51,14 @@ const CreateGroup = ({navigation, route}: CreateGroupProps) => {
                         backgroundColor="mainBackground"
                         width={width * 0.90}
                         flexDirection="row"
-                        borderColor={"secondaryCardText"} borderWidth={1}
+                        borderColor="secondaryCardText" borderWidth={1}
                         borderRadius={10}
                         p="m"
                         alignItems="center"
-                        columnGap={"s"}
-                        mt={"s"}
+                        columnGap="s"
+                        mt="s"
                     >
-                        {/*<Box flex={0.15}>{getTokenIcon(group.asset)}</Box>*/}
+                        {/* <Box flex={0.15}>{getTokenIcon(group.asset)}</Box> */}
                         <Box flex={0.15}>{getTokenIcon()}</Box>
 
                         <Box flex={1}>
@@ -72,13 +72,13 @@ const CreateGroup = ({navigation, route}: CreateGroupProps) => {
                     </Box>)}
                 showsVerticalScrollIndicator={false}
             />
-            <Box flex={1} flexDirection={"row"}
-                 width={"100%"}
-                 justifyContent={"flex-start"}
-                 gap={"s"}
-                 alignContent={"center"}
-                 position={"absolute"}
-                 bottom={60} p={"m"}
+            <Box flex={1} flexDirection="row"
+                 width="100%"
+                 justifyContent="flex-start"
+                 gap="s"
+                 alignContent="center"
+                 position="absolute"
+                 bottom={60} p="m"
             >
                 <Button title="Add"
                         onPress={() => navigation.navigate("AddParticipant", {participants})}/>
@@ -87,7 +87,7 @@ const CreateGroup = ({navigation, route}: CreateGroupProps) => {
             </Box>
         </Box>
     );
-};
+}
 
 const styles = StyleSheet.create({
     inputContainer: {
@@ -103,6 +103,4 @@ export default CreateGroup;
 
 const getTokenIcon = (
     // assetName: string
-) => {
-    return <Usdt height={34} width={34}/>;
-};
+) => <Usdt height={34} width={34}/>;

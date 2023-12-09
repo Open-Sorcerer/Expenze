@@ -1,7 +1,8 @@
 import * as React from "react"
 import Svg, { SvgProps, G, Circle, Path } from "react-native-svg"
-const Dai = (props: SvgProps) => (
-  <Svg
+
+function Dai(props: SvgProps) {
+  return <Svg
     viewBox="0 0 32 32"
     width={24}
     height={24}
@@ -15,5 +16,5 @@ const Dai = (props: SvgProps) => (
       />
     </G>
   </Svg>
-)
+}
 export default React.memo(Dai)

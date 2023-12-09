@@ -6,7 +6,7 @@ import AddContact from "screens/Main/Contacts/AddContact";
 
 const Stack = createNativeStackNavigator<ContactsStackParamList>();
 
-const ContactsStackNavigator = () => {
+function ContactsStackNavigator() {
     // const {activeTheme} = useThemeStore();
     // const isDarkTheme = activeTheme === "dark";
     // const statusBarBg = isDarkTheme
@@ -16,7 +16,7 @@ const ContactsStackNavigator = () => {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name={"AddressBook"} component={AddressBook} options={{headerShown: false}}/>
+            <Stack.Screen name="AddressBook" component={AddressBook} options={{headerShown: false}}/>
             <Stack.Screen
                 name="AddContact"
                 component={AddContact}
@@ -26,17 +26,17 @@ const ContactsStackNavigator = () => {
                     headerShown: false
                 }}
             />
-            {/*<Stack.Screen*/}
-            {/*    name="ViewGroup"*/}
-            {/*    component={ViewGroup}*/}
-            {/*    options={{*/}
-            {/*        animation: "fade_from_bottom",*/}
-            {/*        headerRight: () => null,*/}
-            {/*        headerShown: false*/}
-            {/*    }}*/}
-            {/*/>*/}
+            {/* <Stack.Screen */}
+            {/*    name="ViewGroup" */}
+            {/*    component={ViewGroup} */}
+            {/*    options={{ */}
+            {/*        animation: "fade_from_bottom", */}
+            {/*        headerRight: () => null, */}
+            {/*        headerShown: false */}
+            {/*    }} */}
+            {/* /> */}
         </Stack.Navigator>
     );
-};
+}
 
 export default ContactsStackNavigator;

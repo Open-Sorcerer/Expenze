@@ -5,7 +5,7 @@ type Props = {
   message: string;
 };
 
-const ErrorMessage = ({ message }: Props) => {
+function ErrorMessage({ message }: Props) {
   return (
     <Box>
       <Text variant="body" color="primaryCardText">
@@ -13,6 +13,6 @@ const ErrorMessage = ({ message }: Props) => {
       </Text>
     </Box>
   );
-};
+}
 
 export default React.memo(ErrorMessage);

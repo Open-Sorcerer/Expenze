@@ -1,10 +1,10 @@
 import React, { type FC } from "react";
 import { Pressable, SectionList, StyleSheet, View } from "react-native";
-import appJson from "../../../app.json";
-import packageJSON from "../../../package.json";
 import { Box, Text } from "theme";
 import Constants, { ExecutionEnvironment } from "expo-constants";
 import getAppDetails from "utils/debug/getAppDetails";
+import packageJSON from "../../../package.json";
+import appJson from "../../../app.json";
 
 const renderItem: FC<{ item: { label: string; value: string } }> = ({
   item,
@@ -83,13 +83,13 @@ type ItemProps = {
   value: string;
 };
 
-const ListHeader = () => {
+function ListHeader() {
   return (
     <View>
       {/* <Item label="App Bundle Load Time" value={getAppDetails().appBundleLoadTime} /> */}
     </View>
   );
-};
+}
 
 const Item: FC<ItemProps> = ({ label, value }: ItemProps) => (
   <Pressable

@@ -10,7 +10,7 @@ import {useNavigation} from "@react-navigation/native";
 import {useWalletConnectModal} from "@walletconnect/modal-react-native";
 // import {Ionicons} from "@expo/vector-icons";
 
-const FeedHome = () => {
+function FeedHome() {
 
     // useUserBalance();
     const navigation = useNavigation();
@@ -18,28 +18,28 @@ const FeedHome = () => {
 
     const {userBalance} = useAppState();
     return (
-        <Box flex={1} backgroundColor="mainBackground" alignItems="center" gap={"m"} p="s" height={"100%"}
-             width={"100%"}>
+        <Box flex={1} backgroundColor="mainBackground" alignItems="center" gap="m" p="s" height="100%"
+             width="100%">
             <Box
                 p="m"
                 flexDirection="row"
                 justifyContent="space-between"
                 alignItems="center"
-                columnGap={"m"}
+                columnGap="m"
             >
                 <Text color="accent">Your Balance: {userBalance} Matic</Text>
                 <LatestBlock/>
             </Box>
             <SendToken/>
             <RecentGroups/>
-            <Box position={"absolute"} right={30} bottom={80}>
-                {/*<Ionicons name={"add-circle"} size={60} color={"#00FF00"}/>*/}
-                <Button title={"Create Group"} onPress={() => {
+            <Box position="absolute" right={30} bottom={80}>
+                {/* <Ionicons name={"add-circle"} size={60} color={"#00FF00"}/> */}
+                <Button title="Create Group" onPress={() => {
                     navigation.navigate("CreateGroup", {participants: [{name: "You", address: address!}]});
                 }}/>
             </Box>
         </Box>
     );
-};
+}
 
 export default FeedHome;

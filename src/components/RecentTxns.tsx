@@ -2,13 +2,13 @@ import useEthereumTransactions from "hooks/useRecentTxns";
 import React, { useState } from "react";
 import { ActivityIndicator, FlatList, RefreshControl } from "react-native";
 import { Transaction } from "types/common";
+import { Text } from "theme";
 import TxnCard from "./TxnCard";
 import ErrorMessage from "./UI/ErrorMessage";
-import { Text } from "theme";
 
 const TXN_CARD_HEIGHT = 43;
 
-const RecentTxns = () => {
+function RecentTxns() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { transactions, error, loading, fetchTransactions } =
@@ -17,7 +17,7 @@ const RecentTxns = () => {
     <ErrorMessage message="Failed to load txns" />;
   }
   if (loading) {
-    return <ActivityIndicator size={"small"} />;
+    return <ActivityIndicator size="small" />;
   }
 
   const handleRefresh = async () => {
@@ -37,9 +37,7 @@ const RecentTxns = () => {
     offset: TXN_CARD_HEIGHT * index,
     index,
   });
-  const renderItem = ({ item }: { item: Transaction }) => {
-    return <TxnCard transaction={item} />;
-  };
+  const renderItem = ({ item }: { item: Transaction }) => <TxnCard transaction={item} />;
 
   const keyExtractor = (_: unknown, index: number) => index.toString();
 
@@ -67,10 +65,10 @@ const RecentTxns = () => {
       />
     );
   }
-};
+}
 
-const ListHeaderComponent = () => (
-  <Text color="primaryCardText">Your recent txns</Text>
-);
+function ListHeaderComponent() {
+  return <Text color="primaryCardText">Your recent txns</Text>
+}
 
 export default RecentTxns;

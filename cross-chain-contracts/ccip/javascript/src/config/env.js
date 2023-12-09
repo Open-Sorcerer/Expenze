@@ -34,7 +34,7 @@ const getProviderRpcUrl = (network) => {
       rpcUrl = "https://evocative-billowing-uranium.matic-testnet.quiknode.pro/ae9c0ad721805275621cdb86239919acf5b70050/"
       break;
     default:
-      throw new Error("Unknown network: " + network);
+      throw new Error(`Unknown network: ${  network}`);
   }
 
   if (!rpcUrl)
