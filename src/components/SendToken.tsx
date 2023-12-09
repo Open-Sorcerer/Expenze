@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 import React, { useState } from "react";
 import { Alert, Button, StyleSheet, TextInput } from "react-native";
 import { Box, theme } from "theme";
 import formatEthAddress from "utils/formatEthAddress";
 import useCCIPTransfer from "hooks/useCCIP";
+import { usePrepareContractWrite } from "wagmi";
 import {
   registerUser,
   settleExpense,
@@ -11,6 +13,16 @@ import {
   updateUserDetails,
   createGroup,
 } from "../lib/splitwiseHelper";
+
+import routerABI from "../../cross-chain-contracts/ccip/abi/Router.json";
+
+interface message {
+  receiverAddress: string; // convert the address to bytes
+  data: string; // convert the data to bytes use "0x" for the data // hardcode
+  tokensToSend: tokenAmounts[];
+  feeTokenAddress: string; // address(0) for native and address(1) for LINK
+  extraArgs: any; // make an interface for this
+}
 
 const contractAddressChainDB = {
   EthSepolia: "0xD0daae2231E9CB96b94C8512223533293C3693Bf",
@@ -31,25 +43,39 @@ const destinationChainIDDB = {
 function SendToken() {
   const { address, provider } = useWalletConnectModal();
   const { SendBlockchainTxn } = useCCIPTransfer();
-  const destinationChainIDDB = {
-    EthSepolia: "16015286601757825753",
-    OptimismGoerli: "2664363617261496610",
-    AvalancheFuji: "14767482510784806043",
-    ArbitrumTestnet: "6101244977088475029",
-    PolygonMumbai: "12532609583862916517",
-  };
+
   const [sendTxConfig, setSendTxConfig] = useState({
     toAddress: address,
     ammount: "",
     isSending: false,
   });
 
+  const sendingMessage: message = {
+    receiverAddress: "0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a",
+    data: "0x",
+    tokensToSend: [
+      {
+        tokenAddress: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+        amount: "1000000000000000000",
+      },
+    ],
+    feeTokenAddress: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+    extraArgs: "",
+  };
+
   const sendTokens = async () =>
     // destinationChainID: string,
     // destinationAddress: string,
     // amount: number
     {
-      console.log("sending tokens");
+      const { config, error } = usePrepareContractWrite({
+        address: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+        abi: routerABI,
+        functionName: "ccipSend",
+        args: [destinationChainIDDB.OptimismGoerli, sendingMessage],
+      });
+
+      console.log(config);
     };
 
   const hello = async () => {
