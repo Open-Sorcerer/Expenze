@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import {Button, FlatList, StyleSheet, TextInput} from "react-native";
 import {Box, Text, theme} from "theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import {AddExpenseProps} from "../../../types/navigation";
-import {participant} from "../../../types/common";
+import {AddExpenseProps} from "types/navigation";
+import {participant} from "types/common";
 
 function AddExpense({navigation, route}: AddExpenseProps) {
     const [expenseName, setExpenseName] = useState<string>("");
@@ -11,16 +11,16 @@ function AddExpense({navigation, route}: AddExpenseProps) {
     const [amount, setAmount] = useState<number>(0);
     const [participants] = useState<participant[]>(
         [...route.params.participants,
-            {name: "Myself", address: "0x0000000000"},
-            {name: "Dummy", address: "0x0000000000"},
+            {name: "Myself", walletAddress: "0x0000000000"},
+            {name: "Dummy", walletAddress: "0x0000000000"},
     ]);
     const [selectedParticipants, setSelectedParticipants] = useState<participant[]>([]);
 
-    const toggleParticipant = (participant: participant) => {
-        if (selectedParticipants.includes(participant)) {
-            setSelectedParticipants(selectedParticipants.filter(p => p !== participant));
+    const toggleParticipant = (selectedParticipant: participant) => {
+        if (selectedParticipants.includes(selectedParticipant)) {
+            setSelectedParticipants(selectedParticipants.filter(p => p !== selectedParticipant));
         } else {
-            setSelectedParticipants([...selectedParticipants, participant]);
+            setSelectedParticipants([...selectedParticipants, selectedParticipant]);
         }
     };
 

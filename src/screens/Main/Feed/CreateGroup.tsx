@@ -2,20 +2,22 @@ import React, {useEffect, useState} from "react";
 import {Button, FlatList, StyleSheet, TextInput, useWindowDimensions} from "react-native";
 import {Box, Text, theme} from "theme";
 import Usdt from "icons/Usdt";
-import {createGroup} from "../../../lib/splitwiseHelper";
-import {CreateGroupProps} from "../../../types/navigation";
+import {CreateGroupProps} from "types/navigation";
+import {AddressBookEntry, createGroup} from "lib/splitwiseHelper";
 
 function CreateGroup({navigation, route}: CreateGroupProps) {
     const {width} = useWindowDimensions();
     const [groupName, setGroupName] = useState("");
     const [groupDescription, setGroupDescription] = useState("");
-    const [participants, setParticipants] = useState(route.params.participants);
+    const [participants, setParticipants] = useState<AddressBookEntry[]>(route.params.participants);
     useEffect(() => {
+        console.log("Participants:");
+        console.log(route.params.participants);
         setParticipants(route.params.participants);
     }, [route.params.participants]);
     const onSave = () => {
         // Logic to handle save action
-        createGroup(groupName, groupDescription, participants.map((participant: any) => participant.walletAddress));
+        createGroup(groupName, groupDescription, participants.map((participant: AddressBookEntry) => participant.walletAddress));
         console.log("Save button pressed");
     };
 

@@ -1,42 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { Box, Text } from "theme";
-import { Button, FlatList, useWindowDimensions } from "react-native";
+import React, {useEffect, useState} from "react";
+import {Box, Text} from "theme";
+import {Button, FlatList, useWindowDimensions} from "react-native";
 import Usdt from "icons/Usdt";
 import formatEthAddress from "utils/formatEthAddress";
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from "@react-navigation/native";
 import useAppState from "store/AppStore";
-import { AddressBook, addressBookFetch } from "../../../lib/splitwiseHelper";
+import {AddressBook, addressBookFetch} from "lib/splitwiseHelper";
 
 function AddressBookie() {
-    const { width } = useWindowDimensions();
-    const { currentAddress } = useAppState();
+    const {width} = useWindowDimensions();
+    const {currentAddress} = useAppState();
     const navigation = useNavigation();
     const [contactList, setContactList] = useState([
-        { name: "saviour1001.eth", walletAddress: formatEthAddress("0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a") },
+        {name: "saviour1001.eth", walletAddress: formatEthAddress("0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a")},
     ]);
+    const fetchData = async () => {
+        try {
+            const fetchedContacts: AddressBook = await addressBookFetch(currentAddress!) as unknown as AddressBook;
+            console.log("AddressBook:");
+            console.log(fetchedContacts);
+
+            if (fetchedContacts?.friendsData) {
+                setContactList(fetchedContacts.friendsData);
+                console.log("ContactList:");
+                console.log(fetchedContacts.friendsData); // Log the updated state directly
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const fetchedContacts: AddressBook = await addressBookFetch(currentAddress!) as unknown as AddressBook;
-                console.log("AddressBook:");
-                console.log(fetchedContacts);
-
-                if (fetchedContacts?.friendsData) {
-                    setContactList(fetchedContacts.friendsData);
-                    console.log("ContactList:");
-                    console.log(fetchedContacts.friendsData); // Log the updated state directly
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
         fetchData();
     }, [currentAddress]);
 // Include currentAddress in the dependency array to re-run the effect when it changes
 
-    const renderItem = ({ item }: { item: any }) => (
+    const renderItem = ({item}: { item: any }) => (
         <Box
             flex={1}
             backgroundColor="mainBackground"
@@ -63,11 +62,11 @@ function AddressBookie() {
         </Box>
     );
 
-    const getTokenIcon = () => <Usdt height={34} width={34} />;
+    const getTokenIcon = () => <Usdt height={34} width={34}/>;
 
     const handleAddContact = () => {
         // Replace with your navigation logic to add a contact
-        navigation.navigate("AddContact", { contactList });
+        navigation.navigate("AddContact", {contactList});
     };
 
     // Use contacts here outside the function
@@ -88,7 +87,7 @@ function AddressBookie() {
                  position="absolute"
                  bottom={60} p="m"
             >
-                <Button onPress={handleAddContact} title="Add Contact" />
+                <Button onPress={handleAddContact} title="Add Contact"/>
             </Box>
         </Box>
     );

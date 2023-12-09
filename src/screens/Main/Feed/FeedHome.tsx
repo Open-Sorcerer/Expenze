@@ -7,14 +7,14 @@ import RecentGroups from "components/RecentGroups";
 import useAppState from "store/AppStore";
 import {Button} from "react-native";
 import {useNavigation} from "@react-navigation/native";
-import {useWalletConnectModal} from "@walletconnect/modal-react-native";
+import {AddressBookEntry} from "lib/splitwiseHelper";
 // import {Ionicons} from "@expo/vector-icons";
 
 function FeedHome() {
 
     // useUserBalance();
     const navigation = useNavigation();
-    const {address} = useWalletConnectModal();
+    const {currentAddress} = useAppState();
 
     const {userBalance} = useAppState();
     return (
@@ -35,7 +35,7 @@ function FeedHome() {
             <Box position="absolute" right={30} bottom={80}>
                 {/* <Ionicons name={"add-circle"} size={60} color={"#00FF00"}/> */}
                 <Button title="Create Group" onPress={() => {
-                    navigation.navigate("CreateGroup", {participants: [{name: "You", walletAddress: address!}]});
+                    navigation.navigate("CreateGroup", {participants: [{name: "You", walletAddress: currentAddress!} as AddressBookEntry]});
                 }}/>
             </Box>
         </Box>

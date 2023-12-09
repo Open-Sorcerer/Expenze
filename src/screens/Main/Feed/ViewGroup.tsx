@@ -3,7 +3,7 @@ import {Button, FlatList, StyleSheet, TextInput, useWindowDimensions} from "reac
 import {Box, Text, theme} from "theme";
 import Usdt from "icons/Usdt";
 import {useNavigation} from "@react-navigation/native";
-import {participant} from "../../../types/common";
+import {participant} from "types/common";
 
 function ViewGroup() {
     const {width} = useWindowDimensions();
