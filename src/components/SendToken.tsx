@@ -16,6 +16,10 @@ import {
 
 import routerABI from "../../cross-chain-contracts/ccip/abi/Router.json";
 
+interface tokenAmounts {
+  token: string;
+  amount: string; // convert the amount to wei
+}
 interface message {
   receiverAddress: string; // convert the address to bytes
   data: string; // convert the data to bytes use "0x" for the data // hardcode
@@ -40,6 +44,25 @@ const destinationChainIDDB = {
   PolygonMumbai: "12532609583862916517",
 };
 
+const data = {
+  destination: "12532609583862916517",
+  message: {
+    receiver:
+      "0x0000000000000000000000009309860f6e4b79b1a40ba35327cd6ae1bb27dac7",
+    data: "0x",
+    tokenAmounts: [
+      {
+        token: "0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05",
+        amount: { type: "BigNumber", hex: "0x038d7ea4c68000" },
+      },
+    ],
+    feeToken: "0x779877A7B0D9E8603169DdbD7836e478b4624789",
+    extraArgs:
+      "0x97a657c900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  },
+  fees: { type: "BigNumber", hex: "0x0111a6ca974421fd" },
+};
+
 function SendToken() {
   const { address, provider } = useWalletConnectModal();
   const { SendBlockchainTxn } = useCCIPTransfer();
@@ -50,17 +73,19 @@ function SendToken() {
     isSending: false,
   });
 
-  const sendingMessage: message = {
-    receiverAddress: "0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a",
+  const sendingMessage = {
+    receiver:
+      "0x0000000000000000000000009309860f6e4b79b1a40ba35327cd6ae1bb27dac7",
     data: "0x",
-    tokensToSend: [
+    tokenAmounts: [
       {
-        tokenAddress: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
-        amount: "1000000000000000000",
+        token: "0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05",
+        amount: { type: "BigNumber", hex: "0x038d7ea4c68000" },
       },
     ],
-    feeTokenAddress: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
-    extraArgs: "",
+    feeToken: "0x779877A7B0D9E8603169DdbD7836e478b4624789",
+    extraArgs:
+      "0x97a657c900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
   };
 
   const sendTokens = async () =>
