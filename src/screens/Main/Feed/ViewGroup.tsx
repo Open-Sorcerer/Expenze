@@ -63,9 +63,8 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
     }, [group.users]);
 
     useEffect(() => {
-        if (group.expenses)
-            fetchExpenses();
-    }, [group.expenses]);
+        handleRefresh();
+    }, []);
 
     if (error) {
         return <ErrorMessage message="Failed to load groups"/>;
@@ -86,9 +85,9 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
         }
     };
 
-    const onSave = () => {
+    const handleSettleExpense = () => {
         // Logic to handle save action
-        console.log("Save button pressed");
+        console.log("Settle logic triggered");
     };
 
     return (
@@ -135,7 +134,7 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
             <Box flex={1} flexDirection="row" width="100%" justifyContent="flex-start" gap="s" alignContent="center"
                  position="absolute" bottom={60} p="m">
                 <Button title="Cancel" onPress={() => navigation.navigate("FeedHome")}/>
-                <Button title="Save" onPress={onSave}/>
+                <Button title="Settle Expense" onPress={handleSettleExpense}/>
             </Box>
         </Box>
     );
