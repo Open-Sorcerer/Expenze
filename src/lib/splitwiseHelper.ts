@@ -532,7 +532,7 @@ export const settleExpense = async (groupId: string) => {
 
 export const addressBookAddition = async (
     user: string,
-    friendsData: AddressBookEntry
+    friendData: AddressBookEntry
 ) => {
     console.log("adding to address book");
     // check if the user is already in the database
@@ -555,13 +555,12 @@ export const addressBookAddition = async (
             `addressBook:${user}`,
             JSON.stringify({
                 user,
-                friendsData,
+                friendsData: [friendData],
             })
         );
     } else {
         // if the address book exists, add the new entry to it
-        addressBook.friendsData.push(friendsData);
-
+        addressBook.friendsData.push(friendData);
         await redis1.set(`addressBook:${user}`, JSON.stringify(addressBook));
     }
 };
