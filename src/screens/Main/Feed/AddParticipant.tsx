@@ -10,7 +10,7 @@ function AddParticipant({navigation, route}: AddParticipantProps) {
     const [participants, setParticipants] = useState(route.params.participants);
     const addParticipant = () => {
         if (participantName.trim() !== "" && participantAddress.trim() !== "") {
-            setParticipants((participants)=>[...participants, {name: participantName, address: participantAddress}]);
+            setParticipants((participants)=>[...participants, {name: participantName, walletAddress: participantAddress}]);
             setParticipantName("");
             setParticipantAddress("");
         }

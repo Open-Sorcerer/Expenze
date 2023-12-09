@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Alert, Button, StyleSheet, TextInput } from "react-native";
 import { Box, theme } from "theme";
 import formatEthAddress from "utils/formatEthAddress";
+import useCCIPTransfer from "hooks/useCCIP";
 import {
   registerUser,
   settleExpense,
@@ -13,6 +14,14 @@ import {
 
 function SendToken() {
   const { address, provider } = useWalletConnectModal();
+  const { SendBlockchainTxn } = useCCIPTransfer();
+  const destinationChainIDDB = {
+    EthSepolia: "16015286601757825753",
+    OptimismGoerli: "2664363617261496610",
+    AvalancheFuji: "14767482510784806043",
+    ArbitrumTestnet: "6101244977088475029",
+    PolygonMumbai: "12532609583862916517",
+  };
   const [sendTxConfig, setSendTxConfig] = useState({
     toAddress: address,
     ammount: "",
@@ -20,7 +29,13 @@ function SendToken() {
   });
 
   const hello = async () => {
-    const data = settleExpense("0");
+    const data = SendBlockchainTxn(
+      destinationChainIDDB.OptimismGoerli,
+      "0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a",
+      1000000000000000000
+    );
+
+    console.log(data);
   };
 
   const sendTx = async () => {
@@ -35,7 +50,7 @@ function SendToken() {
       }
       const intValue = parseInt(sendTxConfig.ammount, 10);
       const intGweiValue = intValue * 10 ** 18;
-      const hexAmount = `0x${  intGweiValue.toString(16)}`;
+      const hexAmount = `0x${intGweiValue.toString(16)}`;
 
       const txnParams = [
         {

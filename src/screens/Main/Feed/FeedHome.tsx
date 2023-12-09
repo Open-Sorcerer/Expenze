@@ -35,7 +35,7 @@ function FeedHome() {
             <Box position="absolute" right={30} bottom={80}>
                 {/* <Ionicons name={"add-circle"} size={60} color={"#00FF00"}/> */}
                 <Button title="Create Group" onPress={() => {
-                    navigation.navigate("CreateGroup", {participants: [{name: "You", address: address!}]});
+                    navigation.navigate("CreateGroup", {participants: [{name: "You", walletAddress: address!}]});
                 }}/>
             </Box>
         </Box>

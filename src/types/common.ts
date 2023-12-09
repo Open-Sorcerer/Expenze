@@ -15,7 +15,7 @@ export type Transaction = {
 
 export type RawContract = {
   value: string;
-  address: string;
+  walletAddress: string;
   decimal: string;
 };
 
@@ -38,5 +38,5 @@ export type Expense = {
 
 export type participant = {
   name: string;
-  address: string;
+  walletAddress: string;
 };

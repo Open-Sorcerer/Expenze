@@ -15,7 +15,7 @@ function CreateGroup({navigation, route}: CreateGroupProps) {
     }, [route.params.participants]);
     const onSave = () => {
         // Logic to handle save action
-        createGroup(groupName, groupDescription, participants.map((participant: any) => participant.address));
+        createGroup(groupName, groupDescription, participants.map((participant: any) => participant.walletAddress));
         console.log("Save button pressed");
     };
 
@@ -66,7 +66,7 @@ function CreateGroup({navigation, route}: CreateGroupProps) {
                                 Name: {item.name}
                             </Text>
                             <Text color="secondaryCardText">
-                                Address: {item.address}
+                                Address: {item.walletAddress}
                             </Text>
                         </Box>
                     </Box>)}

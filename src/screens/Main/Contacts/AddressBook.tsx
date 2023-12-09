@@ -1,27 +1,42 @@
-import React, {useEffect, useState} from "react";
-import {Box, Text} from "theme";
-import {Button, FlatList, useWindowDimensions} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Box, Text } from "theme";
+import { Button, FlatList, useWindowDimensions } from "react-native";
 import Usdt from "icons/Usdt";
 import formatEthAddress from "utils/formatEthAddress";
-import {useWalletConnectModal} from "@walletconnect/modal-react-native";
-import {useNavigation} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import useAppState from "store/AppStore";
-import {AddressBook, addressBookFetch} from "../../../lib/splitwiseHelper";
+import { AddressBook, addressBookFetch } from "../../../lib/splitwiseHelper";
 
 function AddressBookie() {
-    const {width} = useWindowDimensions();
-    const {currentAddress} = useAppState();
+    const { width } = useWindowDimensions();
+    const { currentAddress } = useAppState();
     const navigation = useNavigation();
-    const [contactList] = useState([
-        {name: "suvraneel.lens", address: formatEthAddress(useWalletConnectModal().address)},
-        {name: "saviour1001.eth", address: formatEthAddress("0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a")},
+    const [contactList, setContactList] = useState([
+        { name: "saviour1001.eth", walletAddress: formatEthAddress("0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a") },
     ]);
-    const contacts: AddressBook = addressBookFetch(currentAddress!) as unknown as AddressBook;
+
     useEffect(() => {
-        console.log("AddressBook:");
-        console.log(contacts);
-    }, [contacts]);
-    const renderItem = ({item}: { item: any }) => (
+        const fetchData = async () => {
+            try {
+                const fetchedContacts: AddressBook = await addressBookFetch(currentAddress!) as unknown as AddressBook;
+                console.log("AddressBook:");
+                console.log(fetchedContacts);
+
+                if (fetchedContacts?.friendsData) {
+                    setContactList(fetchedContacts.friendsData);
+                    console.log("ContactList:");
+                    console.log(fetchedContacts.friendsData); // Log the updated state directly
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, [currentAddress]);
+// Include currentAddress in the dependency array to re-run the effect when it changes
+
+    const renderItem = ({ item }: { item: any }) => (
         <Box
             flex={1}
             backgroundColor="mainBackground"
@@ -42,18 +57,20 @@ function AddressBookie() {
                     Name: {item.name}
                 </Text>
                 <Text color="secondaryCardText">
-                    Address: {item.address}
+                    Address: {item.walletAddress}
                 </Text>
             </Box>
         </Box>
     );
 
-    const getTokenIcon = () => <Usdt height={34} width={34}/>;
+    const getTokenIcon = () => <Usdt height={34} width={34} />;
 
     const handleAddContact = () => {
         // Replace with your navigation logic to add a contact
-        navigation.navigate("AddContact", {contactList});
+        navigation.navigate("AddContact", { contactList });
     };
+
+    // Use contacts here outside the function
 
     return (
         <Box flex={1} backgroundColor="mainBackground" alignItems="center" gap="m" p="s" height="100%" width="100%">
@@ -71,7 +88,7 @@ function AddressBookie() {
                  position="absolute"
                  bottom={60} p="m"
             >
-                <Button onPress={handleAddContact} title="Add Contact"/>
+                <Button onPress={handleAddContact} title="Add Contact" />
             </Box>
         </Box>
     );

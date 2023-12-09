@@ -15,26 +15,26 @@ export type RootStackParamList = {
     Debug: undefined;
     Feed: undefined;
     Wallet: undefined;
-    CreateGroup: { participants: { name: string; address: string }[] };
+    CreateGroup: { participants: { name: string; walletAddress: string }[] };
     FeedHome: undefined;
     ViewGroup: undefined;
-    AddParticipant: { participants: { name: string; address: string }[] };
-    AddExpense: { participants: { name: string; address: string }[] };
+    AddParticipant: { participants: { name: string; walletAddress: string }[] };
+    AddExpense: { participants: { name: string; walletAddress: string }[] };
     AddressBook: undefined;
-    AddContact: { contactList: { name: string; address: string }[] };
+    AddContact: { contactList: { name: string; walletAddress: string }[] };
 };
 
 export type FeedStackParamList = {
     FeedHome: undefined;
-    CreateGroup: { participants: { name: string; address: string }[] };
+    CreateGroup: { participants: { name: string; walletAddress: string }[] };
     ViewGroup: undefined;
-    AddParticipant: { participants: { name: string; address: string }[] };
-    AddExpense: { participants: { name: string; address: string }[] };
+    AddParticipant: { participants: { name: string; walletAddress: string }[] };
+    AddExpense: { participants: { name: string; walletAddress: string }[] };
 };
 
 export type ContactsStackParamList = {
     AddressBook: undefined;
-    AddContact: { contactList: { name: string; address: string }[] };
+    AddContact: { contactList: { name: string; walletAddress: string }[] };
 };
 
 // RootStackParamList

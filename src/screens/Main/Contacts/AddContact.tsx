@@ -21,7 +21,7 @@ function AddContact({navigation, route}: AddContactProps) {
                 name: contactName
             } as AddressBookEntry);
             console.log("Add button pressed");
-            setContactList([...contactList, {name: contactName, address: contactAddress}]);
+            setContactList([...contactList, {name: contactName, walletAddress: contactAddress}]);
             navigation.navigate("AddressBook");
         }
     };
