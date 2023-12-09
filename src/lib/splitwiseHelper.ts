@@ -17,13 +17,31 @@ interface expense {
   participants: string[];
   description: string;
   timestamp: number;
+  settled: boolean;
+}
+
+interface settlingTxnsEntry {
+  payerWallet: string;
+  receiverWallet: string;
+  settled: boolean;
 }
 
 interface Group {
   groupName: string;
   users: string[];
   expenses: expense[];
+  settllingTxns: settlingTxnsEntry[];
   groupDescription: string;
+}
+
+interface AddressBookEntry {
+  walletAddress: string;
+  name: string;
+}
+
+interface AddressBook {
+  user: string;
+  friendsData: AddressBookEntry[];
 }
 
 let userIdCounter = 0;
@@ -254,6 +272,8 @@ export const createExpense = async (
 
   // store the expense
 
+  const txnSettled = false;
+
   await redis1.set(
     `expense:${expenseIdCounter}`,
     JSON.stringify({
@@ -264,6 +284,7 @@ export const createExpense = async (
       participants,
       description,
       timestamp,
+      settled: false,
     })
   );
 
@@ -279,6 +300,7 @@ export const createExpense = async (
     participants,
     description,
     timestamp,
+    settled: false,
   });
 
   await redis1.set(`group:${groupId}`, JSON.stringify(group));
@@ -392,20 +414,107 @@ export const calculateBalances = async (groupData: Group) => {
 
   // return the balances
   return balances;
-}; // TODO
+};
 
 export const settleExpense = async (groupId: string) => {
   // fetch all the expenses in the group
+  console.log("settling");
 
-  const group = (await redis1.get(`group:${groupId}`)) as Group;
+  const balance = await calculateBalances(
+    (await redis1.get(`group:${groupId}`)) as Group
+  );
 
-  // const allExpenses = group.expenses;
+  console.log("balance: ", balance);
 
-  // calculate the balances
+  // create a list of debts for each person
 
-  const balances = await calculateBalances(group);
+  const debts: { person: string; amount: number }[] = [];
 
-  console.log("balances: ", balances);
+  for (const person in balance) {
+    if (balance[person] !== 0) {
+      debts.push({ person, amount: Number(balance[person]) });
+    }
+  }
 
-  return balances;
-}; // TODO
+  // sort the debts in ascending order based on the amount
+
+  debts.sort((a, b) => a.amount - b.amount);
+
+  let i = 0;
+
+  let j = debts.length - 1;
+
+  while (i < j) {
+    const debtor = debts[i] as { person: string; amount: number };
+    const creditor = debts[j] as { person: string; amount: number };
+
+    const minTransaction = Math.min(-debtor.amount, creditor.amount);
+
+    console.log(
+      `${debtor.person} needs to pay ${creditor.person}: ${minTransaction}`
+    );
+
+    // send the transactions to redis
+
+    debtor.amount += minTransaction;
+    creditor.amount -= minTransaction;
+
+    if (debtor.amount === 0) {
+      i++;
+    }
+
+    if (creditor.amount === 0) {
+      j--;
+    }
+  }
+
+  return "settled";
+};
+
+export const addressBookAddition = async (
+  user: string,
+  friendsData: AddressBookEntry[]
+) => {
+  // check if the user is already in the database
+  const userObject = (await redis1.get(`user:${user}`)) as User;
+  if (!userObject) {
+    // if they aren't, return
+    console.log("user not registered");
+    return;
+  }
+
+  // check if the address book exists
+  // if it exists add a new entry to it
+  // if it doesn't, create a new address book and add the entry to it
+
+  const addressBook = (await redis1.get(`addressBook:${user}`)) as AddressBook;
+
+  if (addressBook === null) {
+    // if the address book doesn't exist, create a new one
+    await redis1.set(
+      `addressBook:${user}`,
+      JSON.stringify({
+        user,
+        friendsData,
+      })
+    );
+  } else {
+    // if the address book exists, add the new entry to it
+    addressBook.friendsData.push(...friendsData);
+
+    await redis1.set(`addressBook:${user}`, JSON.stringify(addressBook));
+  }
+};
+
+export const addressBookDeletion = async (user: string) => {
+  // check if the user is already in the database
+  const userObject = (await redis1.get(`user:${user}`)) as User;
+  if (!userObject) {
+    // if they aren't, return
+    console.log("user not registered");
+    return;
+  }
+
+  // delete the address book
+  await redis1.del(`addressBook:${user}`);
+};
