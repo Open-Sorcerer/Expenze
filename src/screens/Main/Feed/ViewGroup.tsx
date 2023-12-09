@@ -6,14 +6,14 @@ import {useNavigation} from "@react-navigation/native";
 import {participant} from "../../../types/common";
 
 function ViewGroup() {
-    const { width } = useWindowDimensions();
+    const {width} = useWindowDimensions();
     const navigation = useNavigation();
     const [expensesList, setExpensesList] = useState([
-        { name: "Dinner", amount: 0 },
+        {name: "Dinner", amount: 0},
     ]);
     const [expenseName, setExpenseName] = useState("");
     const [expenseAmount, setExpenseAmount] = useState("");
-    const [participants, setParticipants] = useState<participant[]>([]);
+    const [participants] = useState<participant[]>([]);
 
     const onSave = () => {
         // Logic to handle save action
@@ -22,19 +22,20 @@ function ViewGroup() {
 
     function addExpense() {
         const amountAsNumber = parseFloat(expenseAmount);
-        if (expenseName.trim() !== "" && !isNaN(amountAsNumber)) {
-            setExpensesList([...expensesList, { name: expenseName, amount: amountAsNumber }]);
+        if (expenseName.trim() !== "" && !Number.isNaN(amountAsNumber)) {
+            setExpensesList([...expensesList, {name: expenseName, amount: amountAsNumber}]);
             setExpenseName("");
             setExpenseAmount("");
         }
     }
 
     return (
-        <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center" backgroundColor="mainBackground" padding="m">
+        <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center"
+             backgroundColor="mainBackground" padding="m">
             <FlatList
                 data={expensesList}
                 keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                     <Box
                         flex={1}
                         backgroundColor="mainBackground"
@@ -80,13 +81,14 @@ function ViewGroup() {
                     selectionColor={theme.colors.accent}
                     value={expenseAmount}
                 />
-                <Button title="Add" onPress={addExpense} />
+                <Button title="Add" onPress={addExpense}/>
                 <Button title="lfg"
                         onPress={() => navigation.navigate("AddExpense", {participants})}/>
             </Box>
-            <Box flex={1} flexDirection="row" width="100%" justifyContent="flex-start" gap="s" alignContent="center" position="absolute" bottom={60} p="m">
-                <Button title="Cancel" onPress={() => navigation.navigate("FeedHome")} />
-                <Button title="Save" onPress={onSave} />
+            <Box flex={1} flexDirection="row" width="100%" justifyContent="flex-start" gap="s" alignContent="center"
+                 position="absolute" bottom={60} p="m">
+                <Button title="Cancel" onPress={() => navigation.navigate("FeedHome")}/>
+                <Button title="Save" onPress={onSave}/>
             </Box>
         </Box>
     );
@@ -104,4 +106,4 @@ const styles = StyleSheet.create({
 
 export default ViewGroup;
 
-const getTokenIcon = () => <Usdt height={34} width={34} />;
+const getTokenIcon = () => <Usdt height={34} width={34}/>;

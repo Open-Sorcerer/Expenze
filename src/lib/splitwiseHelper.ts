@@ -580,17 +580,15 @@ export const addressBookFetch = async (user: string) => {
     // if it doesn't, return an empty structure
 
     const addressBook = (await redis1.get(`addressBook:${user}`)) as AddressBook;
-    console.log(addressBook);
     if (addressBook === null) {
         // if the address book doesn't exist, return an empty structure
         return {
             user,
             friendsData: [],
         };
-    } 
-        // if the address book exists, return it
-        return addressBook;
-    
+    }
+    // if the address book exists, return it
+    return addressBook;
 };
 
 export const addressBookDeletion = async (user: string) => {
