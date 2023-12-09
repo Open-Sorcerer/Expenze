@@ -1,44 +1,43 @@
-import React, { useState } from "react";
-import { Button, StyleSheet, TextInput } from "react-native";
-import { Box, theme } from "theme";
+import React, {useState} from "react";
+import {Button, StyleSheet, TextInput} from "react-native";
+import {Box, theme} from "theme";
 import {AddContactProps} from "../../../types/navigation";
-import { useNavigation } from "@react-navigation/native";
 
-const AddParticipant = ({ route }: AddContactProps) => {
-    const navigation = useNavigation();
-    const [participantName, setParticipantName] = useState("");
-    const [participantAddress, setParticipantAddress] = useState("");
+const AddContact = ({navigation, route}: AddContactProps) => {
+    const [contactList, setContactList] = useState(route.params.contactList);
+    const [contactName, setContactName] = useState("");
+    const [contactAddress, setContactAddress] = useState("");
 
-    const handleAddParticipant = () => {
-        if (participantName.trim() !== "" && participantAddress.trim() !== "") {
-            // You can add logic here to add the participant to the address book
-            // For now, navigate to the "AddressBook" screen with the new participant data
-            navigation.navigate("AddressBook", {
-                newParticipant: { name: participantName, address: participantAddress },
-            });
+    const handleAddContact = () => {
+        if (contactName.trim() !== "" && contactAddress.trim() !== "") {
+            // You can add logic here to add the contact to the address book
+            // For now, navigate to the "AddressBook" screen with the new contact data
+            setContactList([...contactList, {name: contactName, address: contactAddress}]);
+            navigation.navigate("AddressBook");
         }
     };
 
     return (
-        <Box flex={1} flexDirection={"column"} justifyContent={"space-between"} alignContent={"center"} backgroundColor="mainBackground" padding="m">
+        <Box flex={1} flexDirection={"column"} justifyContent={"space-between"} alignContent={"center"}
+             backgroundColor="mainBackground" padding="m">
             <Box flex={1} flexDirection={"column"} width={"100%"}>
                 <TextInput
                     style={[styles.inputContainer]}
-                    onChangeText={(text) => setParticipantName(text)}
-                    placeholder="Enter participant name"
+                    onChangeText={(text) => setContactName(text)}
+                    placeholder="Enter contact name"
                     placeholderTextColor={theme.colors.secondaryCardText}
                     selectionColor={theme.colors.accent}
-                    value={participantName}
+                    value={contactName}
                 />
                 <TextInput
                     style={[styles.inputContainer]}
-                    onChangeText={(text) => setParticipantAddress(text)}
+                    onChangeText={(text) => setContactAddress(text)}
                     placeholder={`Enter the Recipient Address`}
                     placeholderTextColor={theme.colors.secondaryCardText}
                     selectionColor={theme.colors.accent}
-                    value={participantAddress}
+                    value={contactAddress}
                 />
-                <Button title="Add" onPress={handleAddParticipant} />
+                <Button title="Add" onPress={handleAddContact}/>
             </Box>
             <Box
                 flex={1}
@@ -51,7 +50,7 @@ const AddParticipant = ({ route }: AddContactProps) => {
                 bottom={60}
                 p={"m"}
             >
-                <Button title="Cancel" onPress={() => navigation.goBack()} />
+                <Button title="Cancel" onPress={() => navigation.goBack()}/>
             </Box>
         </Box>
     );
@@ -67,4 +66,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddParticipant;
+export default AddContact;

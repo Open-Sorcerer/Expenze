@@ -1,5 +1,11 @@
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
-import { registerUser, settleExpense } from "../lib/splitwiseHelper";
+import {
+  registerUser,
+  settleExpense,
+  createExpense,
+  updateUserDetails,
+  createGroup,
+} from "../lib/splitwiseHelper";
 import React, { useState } from "react";
 import { Alert, Button, StyleSheet, TextInput } from "react-native";
 import { Box, theme } from "theme";
@@ -13,7 +19,9 @@ const SendToken = () => {
     isSending: false,
   });
 
-  const hello = async () => {};
+  const hello = async () => {
+    const data = settleExpense("0");
+  };
 
   const sendTx = async () => {
     try {

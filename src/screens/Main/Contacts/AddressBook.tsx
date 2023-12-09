@@ -14,7 +14,7 @@ function AddressBook() {
         {name: "saviour1001.eth", address: formatEthAddress("0x4aB65FEb7Dc1644Cabe45e00e918815D3acbFa0a")},
     ]);
 
-    const renderItem = ({item}) => (
+    const renderItem = ({item}: { item: any }) => (
         <Box
             flex={1}
             backgroundColor="mainBackground"
@@ -45,7 +45,7 @@ function AddressBook() {
 
     const handleAddContact = () => {
         // Replace with your navigation logic to add a contact
-        navigation.navigate("AddContact");
+        navigation.navigate("AddContact", {contactList});
     };
 
     return (

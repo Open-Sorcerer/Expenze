@@ -23,6 +23,7 @@ interface expense {
 interface settlingTxnsEntry {
   payerWallet: string;
   receiverWallet: string;
+  amount: number;
   settled: boolean;
 }
 
@@ -156,6 +157,7 @@ export const createGroup = async (
       groupDescription: groupDescription,
       users: usersWalletAddresses,
       expenses: [],
+      settlingTxns: [],
     })
   );
 
@@ -272,8 +274,6 @@ export const createExpense = async (
 
   // store the expense
 
-  const txnSettled = false;
-
   await redis1.set(
     `expense:${expenseIdCounter}`,
     JSON.stringify({
@@ -285,7 +285,7 @@ export const createExpense = async (
       description,
       timestamp,
       settled: false,
-    })
+    } as expense)
   );
 
   console.log("expense created");
@@ -301,7 +301,7 @@ export const createExpense = async (
     description,
     timestamp,
     settled: false,
-  });
+  } as expense);
 
   await redis1.set(`group:${groupId}`, JSON.stringify(group));
 
@@ -386,6 +386,12 @@ export const calculateBalances = async (groupData: Group) => {
   const allExpenses = groupData.expenses;
   const users = groupData.users;
 
+  // filter the expenses that are not settled
+
+  const unsettledExpenses = allExpenses.filter(
+    (expense) => expense.settled === false
+  );
+
   // if a person needs to pay, the balance will be negative
   // if a person needs to receive money, the balance will be positive
 
@@ -418,21 +424,60 @@ export const calculateBalances = async (groupData: Group) => {
 
 export const settleExpense = async (groupId: string) => {
   // fetch all the expenses in the group
-  console.log("settling");
 
-  const balance = await calculateBalances(
-    (await redis1.get(`group:${groupId}`)) as Group
+  console.log("fetching group data");
+
+  const groupData = (await redis1.get(`group:${groupId}`)) as Group;
+
+  // fetching all the expenses in the group
+  const allExpenses = groupData.expenses;
+  const users = groupData.users;
+
+  // filter the expenses that are not settled
+
+  console.log("filtering expenses");
+
+  const unsettledExpenses = allExpenses.filter(
+    (expense) => expense.settled === false
   );
 
-  console.log("balance: ", balance);
+  // if a person needs to pay, the balance will be negative
+  // if a person needs to receive money, the balance will be positive
+
+  // create a balance object for each user
+  const balances: { [key: string]: number } = {};
+
+  for (let user of users) {
+    balances[user] = 0;
+  }
+
+  // for each expense, calculate the balances
+  for (let expense of unsettledExpenses) {
+    // calculate the amount each person needs to pay
+    const amountPerPerson = expense.amount / expense.participants.length;
+
+    // add the amount to the payer's balance
+
+    balances[expense.payer] += expense.amount;
+
+    // subtract the amount from the participants' balances
+
+    for (let participant of expense.participants) {
+      balances[participant] -= amountPerPerson;
+    }
+  }
+
+  console.log("balances calculated", balances);
 
   // create a list of debts for each person
 
+  console.log("creating debts");
+
   const debts: { person: string; amount: number }[] = [];
 
-  for (const person in balance) {
-    if (balance[person] !== 0) {
-      debts.push({ person, amount: Number(balance[person]) });
+  for (const person in balances) {
+    if (balances[person] !== 0) {
+      debts.push({ person, amount: Number(balances[person]) });
     }
   }
 
@@ -444,29 +489,42 @@ export const settleExpense = async (groupId: string) => {
 
   let j = debts.length - 1;
 
-  while (i < j) {
-    const debtor = debts[i] as { person: string; amount: number };
-    const creditor = debts[j] as { person: string; amount: number };
+  // while (i < j) {
+  //   const debtor = debts[i] as { person: string; amount: number };
+  //   const creditor = debts[j] as { person: string; amount: number };
 
-    const minTransaction = Math.min(-debtor.amount, creditor.amount);
+  //   const minTransaction = Math.min(-debtor.amount, creditor.amount);
 
-    console.log(
-      `${debtor.person} needs to pay ${creditor.person}: ${minTransaction}`
-    );
+  //   console.log(
+  //     `${debtor.person} needs to pay ${creditor.person}: ${minTransaction}`
+  //   );
 
-    // send the transactions to redis
+  //   // send the settlingTxn entry to redis
 
-    debtor.amount += minTransaction;
-    creditor.amount -= minTransaction;
+  //   const settlingTxnsEntry = {
+  //     payerWallet: debtor.person,
+  //     receiverWallet: creditor.person,
+  //     amount: minTransaction,
+  //     settled: false,
+  //   };
 
-    if (debtor.amount === 0) {
-      i++;
-    }
+  //   // groupData.settllingTxns.
 
-    if (creditor.amount === 0) {
-      j--;
-    }
-  }
+  //   // await redis1.set(`group:${groupId}`, JSON.stringify(groupData));
+
+  //   // update the balances
+
+  //   debtor.amount += minTransaction;
+  //   creditor.amount -= minTransaction;
+
+  //   if (debtor.amount === 0) {
+  //     i++;
+  //   }
+
+  //   if (creditor.amount === 0) {
+  //     j--;
+  //   }
+  // }
 
   return "settled";
 };
@@ -503,6 +561,33 @@ export const addressBookAddition = async (
     addressBook.friendsData.push(...friendsData);
 
     await redis1.set(`addressBook:${user}`, JSON.stringify(addressBook));
+  }
+};
+
+export const addressBookFetch = async (user: string) => {
+  // check if the user is already in the database
+  const userObject = (await redis1.get(`user:${user}`)) as User;
+  if (!userObject) {
+    // if they aren't, return
+    console.log("user not registered");
+    return;
+  }
+
+  // check if the address book exists
+  // if it exists return it
+  // if it doesn't, return an empty structure
+
+  const addressBook = (await redis1.get(`addressBook:${user}`)) as AddressBook;
+
+  if (addressBook === null) {
+    // if the address book doesn't exist, return an empty structure
+    return {
+      user,
+      friendsData: [],
+    };
+  } else {
+    // if the address book exists, return it
+    return addressBook;
   }
 };
 
