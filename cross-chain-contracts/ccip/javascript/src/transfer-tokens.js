@@ -185,13 +185,14 @@ const transferTokens = async () => {
     console.log(`destination ChainSelector router ${destinationChainSelector}`);
     console.log(`message ${message}`);
 
-    const arguements = {
-      destination: destinationChainSelector,
-      message: message,
-      fees: fees,
-    };
+    const params = {
+      "destination": destinationChainSelector,
+      "message": message,
+      "fees" : fees
+    }
 
-    const merkleRootsData = JSON.stringify(arguements);
+  
+    const merkleRootsData = JSON.stringify(params);
     fs.writeFile("Arguments.json", merkleRootsData);
 
     sendTx = await sourceRouter.ccipSend(destinationChainSelector, message, {

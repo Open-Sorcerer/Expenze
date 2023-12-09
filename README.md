@@ -1,4 +1,4 @@
-# Degen-Splitwise
+# Expenze
 
 Degen-Splitwise is not your ordinary expense management app. It's a mobile decentralized application (dApp) that introduces a whole new level of excitement to how you manage your finances in the wild world of decentralized finance (DeFi).
 
@@ -16,7 +16,7 @@ Ready to embark on a financial journey like never before? Follow these steps:
 
 1. **Clone the Repository**:
    ```sh
-   git clone https://github.com/Open-Sorcerer/DegenSplitwise
+   git clone https://github.com/Open-Sorcerer/Expenze
    ```
 
 ## Install Dependencies
@@ -26,7 +26,7 @@ Follow these steps to install the required dependencies:
 1. **Change Directory**: Navigate to the project directory after cloning the repository:
 
    ```sh
-   cd DegenSplitwise
+   cd Expenze
    ```
 
 2. **Install Packages**: Use Yarn or npm to install the project's dependencies:
