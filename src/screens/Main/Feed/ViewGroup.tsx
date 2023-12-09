@@ -86,7 +86,7 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
     };
 
     const handleSettleExpense = () => {
-        // Logic to handle save action
+        // TODO : Add logic to settle expense
         console.log("Settle logic triggered");
     };
 

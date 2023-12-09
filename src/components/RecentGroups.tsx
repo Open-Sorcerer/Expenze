@@ -44,6 +44,7 @@ function RecentGroups() {
     useEffect(() => {
         // Fetch groups when the component mounts
         fetchGroupsData();
+        console.log("Groups", groups);
     }, []);
 
     const fetchGroupsData = async () => {
