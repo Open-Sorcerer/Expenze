@@ -1,0 +1,79 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.7;
+
+import "@zetachain/protocol-contracts/contracts/zevm/SystemContract.sol";
+import "@zetachain/protocol-contracts/contracts/zevm/interfaces/zContract.sol";
+import "@zetachain/toolkit/contracts/SwapHelperLib.sol";
+import "@zetachain/toolkit/contracts/BytesHelperLib.sol";
+
+contract Swap is zContract {
+    // @dev The system contract it's called by the protocol to interact with the blockchain. Also includes a lot of tools to make easier to interact with ZetaChain.
+    SystemContract public immutable systemContract;
+    // chainID of Bitcoin
+    uint256 constant BITCOIN = 18332;
+
+    /////////////////////////// 
+    /// error Messages ///////
+    //////////////////////////
+    error WrongGasContract();
+    error NotEnoughToPayGasFee();
+
+    constructor(address systemContractAddress) {
+        systemContract = SystemContract(systemContractAddress);
+    }
+
+    modifier onlySystem() {
+        require(
+            msg.sender == address(systemContract),
+            "Only system contract can call this function"
+        );
+        _;
+    }
+
+    function onCrossChainCall(
+        zContext calldata context,
+        address zrc20,
+        uint256 amount,
+        bytes calldata message
+    ) external virtual override onlySystem {
+        // derive the targetTokenAddress and recipientAddress from bytes message
+        address targetTokenAddress;
+        bytes memory recipientAddress;
+
+        if (context.chainID == BITCOIN) {
+            targetTokenAddress = BytesHelperLib.bytesToAddress(message, 0);
+            recipientAddress = abi.encodePacked(
+                BytesHelperLib.bytesToAddress(message, 20)
+            );
+        } else {
+            (address targetToken, bytes memory recipient) = abi.decode(
+                message,
+                (address, bytes)
+            );
+            targetTokenAddress = targetToken;
+            recipientAddress = recipient;
+        }
+
+        uint256 outputAmount = SwapHelperLib._doSwap(
+            systemContract.wZetaContractAddress(),
+            systemContract.uniswapv2FactoryAddress(),
+            systemContract.uniswapv2Router02Address(),
+            zrc20,
+            amount,
+            targetTokenAddress,
+            0
+        );
+
+        (address gasZRC20, uint256 gasFee) = IZRC20(targetTokenAddress)
+            .withdrawGasFee();
+
+        if (gasZRC20 != targetTokenAddress) revert WrongGasContract();
+        if (gasFee >= outputAmount) revert NotEnoughToPayGasFee();
+
+        IZRC20(targetTokenAddress).approve(targetTokenAddress, gasFee);
+        IZRC20(targetTokenAddress).withdraw(
+            recipientAddress,
+            outputAmount - gasFee
+        );
+    }
+}
