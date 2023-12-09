@@ -31,7 +31,9 @@ export type FeedStackParamList = {
 
 export type ContactsStackParamList = {
   AddressBook: undefined;
+  AddContact: { contacts: { name: string; address: string }[] };
 };
+
 // RootStackParamList
 export type ConnectWalletProps = NativeStackScreenProps<
   RootStackParamList,
@@ -71,4 +73,14 @@ export type AddParticipantProps = NativeStackScreenProps<
 export type AddExpenseProps = NativeStackScreenProps<
     FeedStackParamList,
     "AddExpense"
+>;
+
+// ContactsStackParamList
+export type AddressBookProps = NativeStackScreenProps<
+    ContactsStackParamList,
+    "AddressBook"
+>;
+export type AddContactProps = NativeStackScreenProps<
+    ContactsStackParamList,
+    "AddContact"
 >;

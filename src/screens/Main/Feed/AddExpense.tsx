@@ -9,7 +9,7 @@ const AddExpense = ({navigation, route}: AddExpenseProps) => {
     const [expenseName, setExpenseName] = useState<string>("");
     const [payer, setPayer] = useState<string>("");
     const [amount, setAmount] = useState<number>(0);
-    const [participants, setParticipants] = useState<participant[]>(
+    const [participants] = useState<participant[]>(
         [...route.params.participants,
             {name: "Myself", address: "0x0000000000"},
             {name: "Dummy", address: "0x0000000000"},
