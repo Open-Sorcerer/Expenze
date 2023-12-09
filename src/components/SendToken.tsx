@@ -12,6 +12,22 @@ import {
   createGroup,
 } from "../lib/splitwiseHelper";
 
+const contractAddressChainDB = {
+  EthSepolia: "0xD0daae2231E9CB96b94C8512223533293C3693Bf",
+  OptimismGoerli: "0xEB52E9Ae4A9Fb37172978642d4C141ef53876f26",
+  AvalancheFuji: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+  ArbitrumTestnet: "0x88E492127709447A5ABEFdaB8788a15B4567589E",
+  PolygonMumbai: "0x70499c328e1E2a3c41108bd3730F6670a44595D1",
+};
+
+const destinationChainIDDB = {
+  EthSepolia: "16015286601757825753",
+  OptimismGoerli: "2664363617261496610",
+  AvalancheFuji: "14767482510784806043",
+  ArbitrumTestnet: "6101244977088475029",
+  PolygonMumbai: "12532609583862916517",
+};
+
 function SendToken() {
   const { address, provider } = useWalletConnectModal();
   const { SendBlockchainTxn } = useCCIPTransfer();
@@ -27,6 +43,14 @@ function SendToken() {
     ammount: "",
     isSending: false,
   });
+
+  const sendTokens = async () =>
+    // destinationChainID: string,
+    // destinationAddress: string,
+    // amount: number
+    {
+      console.log("sending tokens");
+    };
 
   const hello = async () => {
     const data = SendBlockchainTxn(
@@ -68,6 +92,7 @@ function SendToken() {
       console.log(txResult);
       Alert.alert("Sent !");
     } catch (error) {
+      console.log(error);
     } finally {
       setSendTxConfig((p) => ({ ...p, isSending: false }));
     }
@@ -114,7 +139,7 @@ function SendToken() {
         disabled={!sendTxConfig.ammount || !sendTxConfig.toAddress}
       />
 
-      <Button title="Hello" onPress={hello} />
+      <Button title="Hello" onPress={sendTokens} />
     </Box>
   );
 }
