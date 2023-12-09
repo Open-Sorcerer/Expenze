@@ -8,6 +8,7 @@ import {
   useContractRead,
   usePublicClient,
   useWalletClient,
+  usePrepareContractWrite,
 } from "wagmi";
 import routerABI from "../../cross-chain-contracts/ccip/abi/Router.json";
 import tokenABI from "../../cross-chain-contracts/ccip/abi/IERC20Metadata.json";
@@ -38,13 +39,30 @@ const useCCIPTransfer = () => {
     destinationAddress: string,
     amount: number
   ) => {
-    const { data, writeAsync } = useContractWrite({
+    console.log(
+      "sending txn of chain",
+      destinationChainID,
+      destinationAddress,
+      amount
+    );
+    const routerPrepareContractWrite = usePrepareContractWrite({
       address: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
       abi: routerABI,
       functionName: "ccipSend",
+      args: [],
     });
 
-    console.log("data", data);
+    console.log("routerPrepareContractWrite", routerPrepareContractWrite);
+
+    // const contractWrite = useContractWrite(routerPrepareContractWrite.config);
+
+    // const { data, writeAsync } = useContractWrite({
+    //   address: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+    //   abi: routerABI,
+    //   functionName: "ccipSend",
+    // });
+
+    // console.log("data", data);
 
     // // todo - add args
 
