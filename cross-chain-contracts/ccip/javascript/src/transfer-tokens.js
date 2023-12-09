@@ -12,7 +12,6 @@ const routerAbi = require("../../abi/Router.json");
 const offRampAbi = require("../../abi/OffRamp.json");
 const erc20Abi = require("../../abi/IERC20Metadata.json");
 
-
 // Command: node src/transfer-tokens.js sourceChain destinationChain destinationAccount tokenAddress amount feeTokenAddress(optional)
 // Examples(sepolia):
 
@@ -135,7 +134,7 @@ const transferTokens = async () => {
 
   const encodedExtraArgs = functionSelector + extraArgs.slice(2);
 
-  console.log(`encodedExtraArgs value ${encodedExtraArgs}`)
+  console.log(`encodedExtraArgs value ${encodedExtraArgs}`);
 
   const message = {
     receiver: ethers.utils.defaultAbiCoder.encode(
@@ -171,7 +170,8 @@ const transferTokens = async () => {
 
   // Create a contract instance for the token using its ABI and address
   const erc20 = new ethers.Contract(tokenAddress, erc20Abi, signer);
-  let sendTx; let approvalTx;
+  let sendTx;
+  let approvalTx;
 
   if (!feeTokenAddress) {
     // Pay native
@@ -186,12 +186,11 @@ const transferTokens = async () => {
     console.log(`message ${message}`);
 
     const arguements = {
-      "destination": destinationChainSelector,
-      "message": message,
-      "fees" : fees
-    }
+      destination: destinationChainSelector,
+      message: message,
+      fees: fees,
+    };
 
-  
     const merkleRootsData = JSON.stringify(arguements);
     fs.writeFile("Arguments.json", merkleRootsData);
 
@@ -216,36 +215,31 @@ const transferTokens = async () => {
         `approved router ${sourceRouterAddress} to spend ${amount} of token ${tokenAddress}. Transaction: ${approvalTx.hash}`
       );
 
-    console.log(`destination ChainSelector router ${destinationChainSelector}`);
-    console.log(`message ${message}`);
+      console.log(
+        `destination ChainSelector router ${destinationChainSelector}`
+      );
+      console.log(`message ${message}`);
 
-    const arguements = {
-      "destination": destinationChainSelector,
-      "message": message,
-      "fees" : fees
-    }
-      
-     
+      const arguements = {
+        destination: destinationChainSelector,
+        message: message,
+        fees: fees,
+      };
 
-// const data = {
-//   name: "John",
-//   age: 30,
-//   city: "New York",
+      // const data = {
+      //   name: "John",
+      //   age: 30,
+      //   city: "New York",
       // };
-      
-      
 
-fs.writeFile("data.json", JSON.stringify(arguements), (err) => {
-  if (err) {
-    console.log(err);
-  }
-  console.log("Successfully Written to File.");
-});
+      fs.writeFile("data.json", JSON.stringify(arguements), (err) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log("Successfully Written to File.");
+      });
 
-  
-      
-    // fs.writeFile("Arguments.json", merkleRootsData);
-
+      // fs.writeFile("Arguments.json", merkleRootsData);
 
       const erc20Fees = new ethers.Contract(feeTokenAddress, erc20Abi, signer);
       approvalTx = await erc20Fees.approve(sourceRouterAddress, fees); // 1 approval for the fees token
@@ -338,7 +332,7 @@ fs.writeFile("data.json", JSON.stringify(arguements), (err) => {
         // Check if an event with the specific messageId exists and log its status
         for (const event of events) {
           if (event.args && event.args.messageId === messageId) {
-            const {state} = event.args;
+            const { state } = event.args;
             const status = getMessageState(state);
             console.log(
               `\n✅Status of message ${messageId} is ${status} - Check the explorer https://ccip.chain.link/msg/${messageId}`
