@@ -1,5 +1,6 @@
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {AddressBookEntry} from "lib/splitwiseHelper";
+import {Group} from "types/common";
 
 export type RootStackParamList = {
     ConnectWallet: undefined;
@@ -11,9 +12,9 @@ export type RootStackParamList = {
     Wallet: undefined;
     CreateGroup: { participants: AddressBookEntry[] };
     FeedHome: undefined;
-    ViewGroup: { participants: AddressBookEntry[] };
+    ViewGroup: { group: Group };
     AddParticipant: { participants: AddressBookEntry[] };
-    AddExpense: { participants: AddressBookEntry[] };
+    AddExpense: { participants: AddressBookEntry[], group: Group };
     AddressBook: undefined;
     AddContact: { contactList: AddressBookEntry[] };
 };
@@ -21,9 +22,9 @@ export type RootStackParamList = {
 export type FeedStackParamList = {
     FeedHome: undefined;
     CreateGroup: { participants: AddressBookEntry[] };
-    ViewGroup: { participants: AddressBookEntry[] };
+    ViewGroup: { group: Group };
     AddParticipant: { participants: AddressBookEntry[] };
-    AddExpense: { participants: AddressBookEntry[] };
+    AddExpense: { participants: AddressBookEntry[], group: Group };
 };
 
 export type ContactsStackParamList = {

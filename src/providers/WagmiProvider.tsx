@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { WagmiConfig } from "wagmi";
-import { goerli, mainnet, polygonMumbai } from "viem/chains";
+import { avalancheFuji, goerli, mainnet, polygonMumbai } from "viem/chains";
 import { APP_NAME, APP_DESC, PROJECT_WEBSITE } from "constants/index";
 import {
   Web3Modal,
@@ -22,7 +22,7 @@ const providerMetadata = {
   },
 };
 
-const chains = [mainnet, goerli, polygonMumbai];
+const chains = [avalancheFuji];
 
 const wagmiConfig = defaultWagmiConfig({
   chains,
@@ -32,10 +32,10 @@ const wagmiConfig = defaultWagmiConfig({
 
 createWeb3Modal({ projectId, chains, wagmiConfig });
 const WagmiProvider: React.FC<PropsWithChildren> = ({ children }) => (
-    <WagmiConfig config={wagmiConfig}>
-      {children}
-      <Web3Modal />
-    </WagmiConfig>
-  );
+  <WagmiConfig config={wagmiConfig}>
+    {children}
+    <Web3Modal />
+  </WagmiConfig>
+);
 
 export default WagmiProvider;

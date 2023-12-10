@@ -10,11 +10,8 @@ function AddExpense({navigation, route}: AddExpenseProps) {
     const [expenseName, setExpenseName] = useState<string>("");
     const [payer, setPayer] = useState<string>("");
     const [amount, setAmount] = useState<number>(0);
-    const [participants] = useState<AddressBookEntry[]>(
-        [...route.params.participants,
-            {name: "Myself", walletAddress: "0x0000000000"},
-            {name: "Dummy", walletAddress: "0x0000000000"},
-        ]);
+    const {group} = route.params;
+    const [participants] = useState<AddressBookEntry[]>(route.params.participants);
     const [selectedParticipants, setSelectedParticipants] = useState<participant[]>([]);
 
     const toggleParticipant = (selectedParticipant: participant) => {
@@ -26,9 +23,9 @@ function AddExpense({navigation, route}: AddExpenseProps) {
     };
 
     const handleExpenseAdd = async () => {
-        await createExpense("0", payer, amount, selectedParticipants.map((p: participant) => p.walletAddress), expenseName, new Date().getTime());
+        await createExpense(`${group.groupId}`, payer, amount, selectedParticipants.map((p: participant) => p.walletAddress), expenseName, new Date().getTime());
         console.log("Save button pressed");
-        navigation.navigate("ViewGroup", {participants: selectedParticipants});
+        navigation.navigate("ViewGroup", {group});
     }
 
     const renderParticipantItem = ({item}: { item: any }) => (

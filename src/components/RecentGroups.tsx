@@ -39,31 +39,12 @@ function RecentGroups() {
             groups.push(groupDetails);
         }
         return groups;
-        // return [
-        //     {
-        //         name: "Test Group",
-        //         settledUp: false,
-        //         asset: "USDT",
-        //         transactions: []
-        //     },
-        //     {
-        //         name: "Test Group 2",
-        //         settledUp: true,
-        //         asset: "USDT",
-        //         transactions: []
-        //     },
-        //     {
-        //         name: "Test Group 3",
-        //         settledUp: false,
-        //         asset: "USDT",
-        //         transactions: []
-        //     },
-        // ]
     }
 
     useEffect(() => {
         // Fetch groups when the component mounts
         fetchGroupsData();
+        console.log("Groups", groups);
     }, []);
 
     const fetchGroupsData = async () => {

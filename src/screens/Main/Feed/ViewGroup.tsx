@@ -1,42 +1,103 @@
 import React, {useEffect, useState} from "react";
-import {Button, FlatList, StyleSheet, TextInput, useWindowDimensions} from "react-native";
-import {Box, Text, theme} from "theme";
+import {ActivityIndicator, Button, FlatList, RefreshControl, useWindowDimensions} from "react-native";
+import {Box, Text} from "theme";
 import Usdt from "icons/Usdt";
 import {ViewGroupProps} from "types/navigation";
-import {AddressBookEntry} from "lib/splitwiseHelper";
+import {AddressBookEntry, getGroupDetails, getUserDetails} from "lib/splitwiseHelper";
+import {Expense} from "types/common";
+import ErrorMessage from "components/UI/ErrorMessage";
 
 function ViewGroup({navigation, route}: ViewGroupProps) {
     const {width} = useWindowDimensions();
-    const [expensesList, setExpensesList] = useState([
-        {name: "Dinner", amount: 0},
-    ]);
-    const [expenseName, setExpenseName] = useState("");
-    const [expenseAmount, setExpenseAmount] = useState("");
-    const [participants, setParticipants] = useState<AddressBookEntry[]>(route.params.participants);
-    useEffect(() => {
-        console.log("Participants:");
-        console.log(route.params.participants);
-        setParticipants(route.params.participants);
-    }, [route.params.participants]);
-    const onSave = () => {
-        // Logic to handle save action
-        console.log("Save button pressed");
+    const [expensesList, setExpensesList] = useState<Expense[]>([]);
+    const [participants, setParticipants] = useState<AddressBookEntry[]>([]);
+    const [group] = useState(route.params!.group);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [error] = useState<string | null>(null);
+    const [loading] = useState(false);
+
+    const fetchUsers = async () => {
+        const {users} = group;
+        participants.splice(0);
+        for (const user of users) {
+            const userDetails = await getUserDetails(user);
+            console.log(userDetails);
+            participants.push({
+                name: userDetails?.userId!,
+                walletAddress: userDetails?.walletAddress!
+            } as AddressBookEntry);
+        }
+        // console.log("Users:");
+        // console.log(users);
+        // console.log(participants);
+        setParticipants(participants);
     };
 
-    function addExpense() {
-        const amountAsNumber = parseFloat(expenseAmount);
-        if (expenseName.trim() !== "" && !Number.isNaN(amountAsNumber)) {
-            setExpensesList([...expensesList, {name: expenseName, amount: amountAsNumber}]);
-            setExpenseName("");
-            setExpenseAmount("");
+    const fetchExpenses = async () => {
+        const {groupId} = group;
+        const updatedGroup = await getGroupDetails(`${groupId}`);
+        expensesList.splice(0);
+        for (const expense of updatedGroup.expenses) {
+            expensesList.push(
+                {
+                    id: `${expense.expenseId}`,
+                    groupId: expense.groupId,
+                    payer: expense.payer,
+                    amount: expense.amount,
+                    participants: expense.participants,
+                    description: expense.description,
+                    timestamp: expense.timestamp,
+                }
+            );
         }
+        console.log("Expenses:");
+        console.log(expensesList);
+        setExpensesList(expensesList);
     }
+
+    useEffect(() => {
+        console.log("Participants:");
+        console.log(group.users);
+        if (group.users)
+            fetchUsers();
+    }, [group.users]);
+
+    useEffect(() => {
+        handleRefresh();
+    }, []);
+
+    if (error) {
+        return <ErrorMessage message="Failed to load groups"/>;
+    }
+    if (loading) {
+        return <ActivityIndicator size="small"/>;
+    }
+
+    const handleRefresh = async () => {
+        try {
+            setIsRefreshing(true);
+            // const controller = new AbortController();
+
+            await fetchExpenses();
+        } catch (error) {
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
+
+    const handleSettleExpense = () => {
+        // TODO : Add logic to settle expense
+        console.log("Settle logic triggered");
+    };
 
     return (
         <Box flex={1} flexDirection="column" justifyContent="space-between" alignContent="center"
              backgroundColor="mainBackground" padding="m">
             <FlatList
                 data={expensesList}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh}/>
+                }
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={({item}) => (
                     <Box
@@ -56,7 +117,7 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
 
                         <Box flex={1}>
                             <Text variant="body" color="primaryCardText">
-                                Name: {item.name}
+                                Name: {item.description}
                             </Text>
                             <Text color="secondaryCardText">
                                 Amount: {item.amount}
@@ -67,45 +128,17 @@ function ViewGroup({navigation, route}: ViewGroupProps) {
                 showsVerticalScrollIndicator={false}
             />
             <Box flex={1} flexDirection="column" width="100%">
-                <TextInput
-                    style={styles.inputContainer}
-                    onChangeText={(text) => setExpenseName(text)}
-                    placeholder="Enter expense name"
-                    placeholderTextColor={theme.colors.secondaryCardText}
-                    selectionColor={theme.colors.accent}
-                    value={expenseName}
-                />
-                <TextInput
-                    style={styles.inputContainer}
-                    keyboardType="numeric"
-                    onChangeText={(text) => setExpenseAmount(text)}
-                    placeholder="Enter the Amount"
-                    placeholderTextColor={theme.colors.secondaryCardText}
-                    selectionColor={theme.colors.accent}
-                    value={expenseAmount}
-                />
-                <Button title="Add" onPress={addExpense}/>
-                <Button title="lfg"
-                        onPress={() => navigation.navigate("AddExpense", {participants})}/>
+                <Button title="Add New Expense"
+                        onPress={() => navigation.navigate("AddExpense", {participants, group})}/>
             </Box>
             <Box flex={1} flexDirection="row" width="100%" justifyContent="flex-start" gap="s" alignContent="center"
                  position="absolute" bottom={60} p="m">
                 <Button title="Cancel" onPress={() => navigation.navigate("FeedHome")}/>
-                <Button title="Save" onPress={onSave}/>
+                <Button title="Settle Expense" onPress={handleSettleExpense}/>
             </Box>
         </Box>
     );
 }
-
-const styles = StyleSheet.create({
-    inputContainer: {
-        borderBottomColor: theme.colors.secondaryCardText,
-        borderBottomWidth: 1,
-        padding: 12,
-        marginVertical: 8,
-        color: theme.colors.accent,
-    },
-});
 
 export default ViewGroup;
 
