@@ -27,6 +27,7 @@
 
 - Chainlink CCIP
 - Zetachain
+- Scroll
 
 ### **Frontend**
 
@@ -55,6 +56,9 @@
 - [Explorer Link](https://athens3.explorer.zetachain.com/address/0x942a156cd363CC04Eac8577a509D360eFb5453Fa)
 - [Transaction 1](https://mumbai.polygonscan.com/tx/0xc464d38717ebbf339de44465a49bf6133415981022b2717de5061c91939be05e)
 - [Transaction 2](https://mumbai.polygonscan.com/tx/0x4c5468fa67c6e695d12b11035a1e20d90fe61098d34a5155261ad8b4e9f2f6a2)
+
+### **Scroll**
+- [Contract Address](https://sepolia.scrollscan.com/address/0x781758ff2fcb9bbe5f47533ad5ae0e04982665ef): **`0x781758ff2fcb9bbe5f47533ad5ae0e04982665ef`**
 
 ### Special thanks to the Chainlink and Zetachain teams for their continued support.
 
