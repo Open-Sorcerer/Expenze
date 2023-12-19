@@ -5,7 +5,7 @@ import { Alert, Button, StyleSheet, TextInput } from "react-native";
 import { Box, theme } from "theme";
 import formatEthAddress from "utils/formatEthAddress";
 import useCCIPTransfer from "hooks/useCCIP";
-import { usePrepareContractWrite } from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import {
   registerUser,
   settleExpense,
@@ -67,6 +67,8 @@ function SendToken() {
   const { address, provider } = useWalletConnectModal();
   const { SendBlockchainTxn } = useCCIPTransfer();
 
+  const [messagePassing, setMessagePassing] = useState({});
+
   const [sendTxConfig, setSendTxConfig] = useState({
     toAddress: address,
     ammount: "",
@@ -88,19 +90,30 @@ function SendToken() {
       "0x97a657c900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
   };
 
+  const { config, error } = usePrepareContractWrite({
+    chainId: 43113,
+    address: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+    abi: routerABI,
+    functionName: "ccipSend",
+    args: [destinationChainIDDB.OptimismGoerli, messagePassing],
+  });
+
+  const { data: something, write } = useContractWrite(config);
+
   const sendTokens = async () =>
     // destinationChainID: string,
     // destinationAddress: string,
     // amount: number
     {
-      const { config, error } = usePrepareContractWrite({
-        address: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
-        abi: routerABI,
-        functionName: "ccipSend",
-        args: [destinationChainIDDB.OptimismGoerli, sendingMessage],
-      });
+      console.log("Sending TOkens");
 
       console.log(config);
+
+      setMessagePassing(sendingMessage);
+
+      const tx = write && write();
+
+      console.log(tx);
     };
 
   const hello = async () => {

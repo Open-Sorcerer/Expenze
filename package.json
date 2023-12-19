@@ -1,5 +1,5 @@
 {
-  "name": "DegenSplitwise",
+  "name": "expenze",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -68,6 +68,6 @@
   },
   "private": false,
   "description": "Web3 with React native Starter kit",
-  "author": "VIVEK-SUTHAR <sutharvivek18@gmail.com>",
+  "author": "Open-Sorcerer",
   "license": "MIT"
 }
