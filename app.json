@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "DegenSplitwise",
-    "slug": "degensplitwise",
-    "scheme": "degensplitwise",
+    "name": "Expenze",
+    "slug": "expenze",
+    "scheme": "expenze",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -44,6 +44,11 @@
         }
       ]
     ],
-    "extra": {}
+    "extra": {
+      "eas": {
+        "projectId": "973bebad-f4ac-43f6-85eb-6962fd028712"
+      }
+    },
+    "owner": "suvraneel"
   }
 }
